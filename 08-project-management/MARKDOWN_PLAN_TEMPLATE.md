@@ -80,8 +80,8 @@ Use concise language and focus on essential information only.
 
 1. **Test Categories**:
 
-   - [ ] Unit tests (@pytest.mark.unit)
-   - [ ] Node tests (@pytest.mark.node) - if LangGraph components
+   - [ ] Unit tests (@pytest.mark.unit or equivalent)
+   - [ ] Component tests (@pytest.mark.component) - if using workflow/component architecture
    - [ ] Integration tests (@pytest.mark.integration)
    - [ ] End-to-end tests (@pytest.mark.e2e) - if applicable
 
@@ -237,7 +237,7 @@ command_example --flag value
 - **Service Methods**: [List service methods with placeholder logic]
 - **Integration Points**: [List external integrations not fully implemented]
 - **Database Operations**: [List DB operations that don't persist real data]
-- **Workflow Steps**: [List LangGraph nodes with placeholder logic]
+- **Workflow Steps**: [List workflow components with placeholder logic]
 
 ### �🔄 Next Steps Required
 
@@ -275,10 +275,10 @@ pytest -m "not live" -v
 **Critical Requirement**: Confirm server starts up successfully after all changes
 
 ```bash
-# LangGraph server startup test
+# Application server startup test
 cd /path/to/project
 source .venv/bin/activate
-langgraph dev
+python -m your_app  # or your framework's start command
 
 # Expected: Server starts without critical errors
 # Expected: Port binding successful

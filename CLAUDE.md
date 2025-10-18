@@ -22,6 +22,32 @@ langgraph dev
 pytest -m "unit or integration" -q --cov=src --cov-fail-under=90
 ```
 
+### Chrome DevTools MCP Integration
+
+**Status**: ✅ Installed and Connected
+
+Chrome DevTools MCP server enables AI assistants to debug web applications through live Chrome browser control.
+
+**Quick Commands:**
+```bash
+# Verify MCP status
+claude mcp list
+
+# Add/remove MCP server
+claude mcp add chrome-devtools npx chrome-devtools-mcp@latest
+claude mcp remove chrome-devtools
+```
+
+**Key Capabilities:**
+- Browser automation with Puppeteer
+- Performance trace recording and analysis
+- Network request inspection
+- Console error debugging
+- Screenshot capture for visual validation
+- DOM inspection and manipulation
+
+**Documentation**: See `docs/CHROME_DEVTOOLS_MCP_GUIDE.md` for complete guide
+
 ## Architecture Patterns
 
 ### LangGraph Tool Pattern (MANDATORY)
@@ -256,8 +282,8 @@ Central orchestrator managing parallel execution, conflict resolution, and quali
 - **root-cause-finder**: Exhaustive failure analysis, multi-angle investigation (Parallel safe)
 
 **UI & Frontend Quality:**
-- **ui-bar-raiser**: Comprehensive UI testing, WCAG compliance, auto-recovery with root-cause-finder (Parallel)
-- **ui-playwright-integration**: Browser automation, accessibility snapshots (Parallel)
+- **ui-bar-raiser**: Comprehensive UI testing, WCAG compliance, auto-recovery with root-cause-finder (Parallel). **Uses Chrome DevTools MCP** for live browser debugging, performance tracing, and network inspection
+- **ui-playwright-integration**: Browser automation, accessibility snapshots (Parallel). **Integrates with Chrome DevTools MCP** for enhanced debugging
 - **ui-quality-enhancer**: Component analysis, design system validation (Parallel)
 
 **Development & Code Quality:**
@@ -556,7 +582,7 @@ The ui-bar-raiser agent includes intelligent error detection and automatic recov
 ui-bar-raiser → Playwright navigation → Screenshot/snapshot → Error detection
 ```
 
-**2. Error Detection Triggers**
+**2. Error Detection Triggers** (via Chrome DevTools MCP)
 - Console errors (JavaScript exceptions, warnings)
 - Network failures (404s, 500s, timeouts)
 - Accessibility violations (WCAG A/AA/AAA)

@@ -2,7 +2,7 @@
 
 **Objective**: Provide a repeatable, systematic process for integrating external services and dependencies with production-ready quality standards.
 
-**Purpose**: Every external service integration must follow this playbook to ensure reliability, maintainability, and compliance with our TDD and Code Complete 2 standards.
+**Purpose**: Every external service integration must follow this playbook to ensure reliability, maintainability, and compliance with TDD and Code Complete 2 standards.
 
 **When to Use**: Adding new external APIs, SDKs, webhooks, or any dependency that involves network calls, state synchronization, or semantic contracts.
 
@@ -70,27 +70,27 @@ Using `<Service X>`, our feature must `<do Y>` so that `<metric/goal>`.
 
 ## Primary APIs/Events
 
-- POST /jobs - Create processing job
-- GET /jobs/{id} - Poll job status
-- Webhook job.completed - Async notification
+- POST /resources - Create new resource
+- GET /resources/{id} - Retrieve resource status
+- Webhook resource.completed - Async notification
 
 ## Semantic Dependencies
 
 - A then B -> state=S; B returns expected result
-- POST /jobs -> state becomes PROCESSING
+- POST /resources -> state becomes PROCESSING
 - Eventually webhook -> state becomes COMPLETED
 
 ## Constraints
 
-- Rate limits: 10 requests/second
+- Rate limits: X requests/second
 - Idempotency keys required for mutations
-- Pagination: cursor-based, max 100 items
+- Pagination: cursor-based or offset-based, max items per page
 
 ## Success Metrics
 
-- P95 end-to-end latency < 2s
-- Error rate < 0.1%
-- 99.9% storage success rate
+- P95 end-to-end latency < target threshold
+- Error rate < acceptable threshold
+- Success rate > target percentage
 ```
 
 **Key Activities**:
@@ -207,20 +207,20 @@ observability:
 
 ```python
 @pytest.mark.integration
-async def test_post_then_get_reflects_state(client, dep_api, idempotency_key):
-    """Semantic test: POST /jobs must cause GET /jobs/<id> to reflect state change."""
+async def test_post_then_get_reflects_state(client, api_client, idempotency_key):
+    """Semantic test: POST /resources must cause GET /resources/<id> to reflect state change."""
     # Arrange
-    payload = make_valid_job_payload()
+    payload = make_valid_resource_payload()
 
-    # Act 1: Create job
-    r1 = await dep_api.post("/jobs", json=payload,
+    # Act 1: Create resource
+    r1 = await api_client.post("/resources", json=payload,
                            headers={"Idempotency-Key": idempotency_key})
     assert r1.status_code in (200, 201, 202)
-    job_id = r1.json()["id"]
+    resource_id = r1.json()["id"]
 
     # Act 2: Poll until stable state (semantic contract)
     status = await poll_until_stable(
-        lambda: dep_api.get(f"/jobs/{job_id}").json()["status"],
+        lambda: api_client.get(f"/resources/{resource_id}").json()["status"],
         until=lambda s: s in {"COMPLETED", "FAILED"},
         timeout_s=30
     )
@@ -230,21 +230,21 @@ async def test_post_then_get_reflects_state(client, dep_api, idempotency_key):
 
     # Contract validation for completed object
     if status == "COMPLETED":
-        job = await dep_api.get(f"/jobs/{job_id}")
-        validate_job_response_schema(job.json())
-        assert job.json()["result"]["artifactUrl"]  # Business requirement
+        resource = await api_client.get(f"/resources/{resource_id}")
+        validate_resource_response_schema(resource.json())
+        assert resource.json()["result"]["outputUrl"]  # Business requirement
 ```
 
 **Test Matrix Example**:
 
 ```markdown
-| Case | Path                    | Expectation                      |
-| ---- | ----------------------- | -------------------------------- |
-| H1   | POST /jobs valid -> GET | Eventually COMPLETED with result |
-| E1   | POST invalid payload    | 400 + error.code=VALIDATION      |
-| R1   | Rapid POST x 20         | 429 within 2s, backoff respected |
-| S1   | 5xx then retry          | Succeeds within 3 attempts       |
-| W1   | Webhook signature bad   | 401 + event discarded            |
+| Case | Path                         | Expectation                      |
+| ---- | ---------------------------- | -------------------------------- |
+| H1   | POST /resources valid -> GET | Eventually COMPLETED with result |
+| E1   | POST invalid payload         | 400 + error.code=VALIDATION      |
+| R1   | Rapid POST x 20              | 429 within 2s, backoff respected |
+| S1   | 5xx then retry               | Succeeds within 3 attempts       |
+| W1   | Webhook signature bad        | 401 + event discarded            |
 ```
 
 ### Step 6: Spike → Thin Vertical Slice
@@ -546,20 +546,20 @@ Closes #123
 ```python
 @pytest.mark.integration
 @pytest.mark.live  # Calls real external service
-async def test_end_to_end_document_processing_workflow():
+async def test_end_to_end_resource_processing_workflow():
     """Development TDD: Real integration with real external service."""
     # Arrange: Real service configuration
-    doc_processor = DocumentProcessingService(real_config, real_api_client)
-    test_document = load_test_pdf("invoice_sample.pdf")
+    resource_processor = ResourceProcessingService(real_config, real_api_client)
+    test_resource = load_test_data("sample_input.json")
 
     # Act: Real API calls to external service
-    job_response = await doc_processor.submit_document(test_document)
-    completed_job = await doc_processor.wait_for_completion(job_response.job_id)
+    resource_response = await resource_processor.submit_resource(test_resource)
+    completed_resource = await resource_processor.wait_for_completion(resource_response.resource_id)
 
     # Assert: Real response validation
-    assert completed_job.status == "COMPLETED"
-    assert completed_job.extracted_data.invoice_number
-    assert completed_job.extracted_data.total_amount > 0
+    assert completed_resource.status == "COMPLETED"
+    assert completed_resource.processed_data.output_field
+    assert completed_resource.processed_data.result_count > 0
 ```
 
 ### Unit TDD for Integration Components

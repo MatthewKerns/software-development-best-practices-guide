@@ -723,7 +723,7 @@ command --with --specific --flags
 ### Component Labels
 
 - `api` - API endpoints and middleware
-- `workflow` - LangGraph workflow components
+- `workflow` - Business workflow components
 - `database` - Database operations and storage
 - `frontend` - UI components and static files
 - `docs` - Documentation and guides

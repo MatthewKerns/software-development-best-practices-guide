@@ -272,41 +272,41 @@ interface GeistErrorPatterns {
 
 ## 🎯 **Geist Integration with Existing Practices**
 
-### **Tool Calling Pattern + Geist**
+### **API Integration + Geist**
 ```python
-# Ghost-aware tool usage
-async def ghost_aware_tool_call():
-    # Validate assumptions about tool behavior
+# Ghost-aware API usage
+async def ghost_aware_api_call():
+    # Validate assumptions about API behavior
     # Handle edge cases and error conditions
     # Test integration points and dependencies
-    
-# Geyser-ready tool architecture  
-async def geyser_ready_tool():
+
+# Geyser-ready API architecture
+async def geyser_ready_api():
     # Build in configuration flexibility
     # Add pressure release mechanisms
     # Design for scale and evolution
-    
-# Gist-focused tool implementation
-async def gist_focused_tool():
+
+# Gist-focused API implementation
+async def gist_focused_api():
     # Solve essential problem simply
     # Preserve core functionality
     # Avoid unnecessary complexity
 ```
 
-### **LangGraph Workflow + Geist**
+### **Workflow Design + Geist**
 ```python
 # Ghost analysis for workflow steps
 def ghost_aware_workflow_step(state, config):
     # Validate assumptions about state and data
     # Handle unknown edge cases gracefully
     # Test integration with other steps
-    
+
 # Geyser preparation for workflow evolution
 def geyser_ready_workflow():
     # Design for workflow expansion
     # Add flexibility for new steps
     # Handle scale and performance growth
-    
+
 # Gist focus for workflow core
 def gist_driven_workflow():
     # Focus on essential business process
