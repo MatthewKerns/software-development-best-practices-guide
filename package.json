@@ -1,0 +1,41 @@
+{
+  "name": "@matthewkerns/software-development-best-practices-guide",
+  "version": "1.0.0",
+  "description": "A comprehensive, project-agnostic guide synthesizing principles from Code Complete 2, Clean Code, and Clean Architecture",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthewKerns/software-development-best-practices-guide.git"
+  },
+  "keywords": [
+    "best-practices",
+    "clean-code",
+    "clean-architecture",
+    "code-complete",
+    "software-development",
+    "documentation",
+    "coding-standards"
+  ],
+  "author": "MatthewKerns",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MatthewKerns/software-development-best-practices-guide/issues"
+  },
+  "homepage": "https://github.com/MatthewKerns/software-development-best-practices-guide#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "01-foundations/**/*.md",
+    "02-design-in-code/**/*.md",
+    "03-clean-architecture/**/*.md",
+    "04-quality-through-testing/**/*.md",
+    "05-refactoring-and-improvement/**/*.md",
+    "06-collaborative-construction/**/*.md",
+    "07-geist-gap-analysis-framework/**/*.md",
+    "08-project-management/**/*.md",
+    "99-reference/**/*.md",
+    "README.md",
+    "LICENSE"
+  ]
+}

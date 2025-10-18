@@ -71,19 +71,49 @@ These guides synthesize testing wisdom from:
 ## Current Guides
 
 ### Available Now
-- **COVERAGE_REQUIREMENTS_UPDATED.md** - Coverage standards and requirements
+
+**Core Testing Principles:**
+- **DEVELOPER_TESTING.md** - Developer testing strategies (Code Complete 2, Chapters 22-23)
+  - Testing your own code effectively
+  - Structured basis testing and boundary analysis
+  - Test scaffolding (stubs, mocks, fakes, drivers)
+  - Testing for specific error classes
+  - Data-flow and error guessing techniques
+
+- **UNIT_TESTING_PRINCIPLES.md** - Clean unit testing (Clean Code, Chapter 9)
+  - The Three Laws of TDD
+  - FIRST principles (Fast, Independent, Repeatable, Self-Validating, Timely)
+  - One concept per test
+  - Clean test structure (AAA pattern)
+  - Test doubles (stubs, mocks, fakes, spies)
+
+- **TDD_WORKFLOW.md** - Test-driven development workflow
+  - Red-Green-Refactor cycle in detail
+  - Complete TDD examples (FizzBuzz, real-world scenarios)
+  - TDD strategies (Fake It, Triangulation, Obvious Implementation)
+  - Handling complex scenarios (errors, async, external dependencies)
+  - Common TDD challenges and solutions
+
+- **TEST_DESIGN_PATTERNS.md** - Advanced testing patterns
+  - Creation patterns (Test Data Builder, Object Mother)
+  - Organization patterns (Fixtures, Parameterized Tests)
+  - Isolation patterns (Test Doubles, Dependency Injection)
+  - Assertion patterns (Custom Assertions, Delta Assertions)
+  - Performance and maintainability patterns
+
+- **COVERAGE_STANDARDS.md** - Code coverage standards and practices
+  - Coverage metrics explained (line, branch, function, condition)
+  - Recommended coverage standards by test type
+  - Coverage as a minimum, not a goal
+  - Coverage reporting and gap analysis
+  - Avoiding coverage anti-patterns
+
+### Project-Specific Documents
+- **COVERAGE_REQUIREMENTS_UPDATED.md** - Project-specific coverage update log
 
 ### Coming Soon
 
-**Testing Fundamentals:**
-- **UNIT_TESTING_GUIDE.md** - Writing effective unit tests
-- **INTEGRATION_TESTING_GUIDE.md** - Testing component interactions
-- **TDD_WORKFLOW.md** - Test-driven development red-green-refactor cycle
-- **TEST_STRUCTURE.md** - Arrange-Act-Assert and test organization
-
-**Testing Patterns:**
-- **TEST_DOUBLES.md** - Mocks, stubs, fakes, and spies
-- **FIXTURE_MANAGEMENT.md** - Managing test data and setup
+**Additional Testing Patterns:**
 - **TESTING_BOUNDARIES.md** - Testing at architectural boundaries
 - **HUMBLE_OBJECT_TESTING.md** - Testing hard-to-test code
 

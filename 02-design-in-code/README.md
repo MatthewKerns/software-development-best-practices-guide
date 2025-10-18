@@ -1,139 +1,217 @@
-# Design in Code: Construction-Level Design
+# Design in Code: Construction-Level Design Practices
 
 ## Overview
 
-This directory contains guides on design decisions made during the coding process itself. These are not high-level architectural patterns, but rather the day-to-day design choices developers make while writing code: how to structure routines, manage complexity, handle coupling, and organize code at the construction level.
+This directory contains comprehensive guides for design decisions made during code construction. While architecture establishes system-wide structure, design in construction focuses on the daily choices developers make: how to structure classes, organize functions, choose abstractions, and create maintainable code.
 
-## Why These Practices Matter
-
-Design decisions made during coding have immediate and lasting impact on code quality. Poor construction-level design leads to:
-- Complex, hard-to-understand code
-- Tight coupling that prevents change
-- Hidden dependencies that cause bugs
-- Code that's difficult to test
-- Modules that do too much (or too little)
-
-Good construction-level design creates code that is:
-- Easy to understand and modify
-- Loosely coupled and highly cohesive
-- Testable and debuggable
-- Appropriately sized and scoped
-- Self-documenting through structure
-
-## Source Materials
-
-These guides synthesize principles from:
-
-- **Code Complete 2** by Steve McConnell (Chapters 5-9, 24)
-  - Design in construction
-  - High-quality routines
-  - Defensive programming
-  - Managing complexity
-  - Organizing straight-line code
-
-- **Clean Code** by Robert C. Martin (Chapters 6-10)
-  - Objects and data structures
-  - Error handling
-  - Boundaries
-  - Unit testing
-  - Classes
-
-- **Clean Architecture** by Robert C. Martin (Chapters 7-11)
-  - Component design principles
-  - SRP, OCP, LSP, ISP, DIP (SOLID)
-  - Component cohesion and coupling
-
-## When to Use These Guides
-
-**Before Writing Code:**
-- Planning routine structure and responsibilities
-- Deciding on error handling strategies
-- Determining appropriate abstraction levels
-- Choosing between objects and data structures
-
-**During Development:**
-- Structuring new routines and classes
-- Managing dependencies between components
-- Implementing defensive programming techniques
-- Controlling complexity in algorithms
-
-**During Code Review:**
-- Evaluating routine quality and size
-- Checking coupling and cohesion
-- Assessing error handling approaches
-- Reviewing abstraction levels
-
-**When Refactoring:**
-- Breaking apart large routines
-- Reducing coupling between modules
-- Improving cohesion within classes
-- Simplifying complex control structures
+Design happens continuously during coding. Every class you create, every function you write, every abstraction you introduce is a design decision that shapes the quality and maintainability of your codebase.
 
 ## Guides in This Directory
 
-### Coming Soon
-- **ROUTINE_DESIGN.md** - Creating high-quality functions and methods
-- **MANAGING_COMPLEXITY.md** - Techniques for keeping code understandable
-- **DEFENSIVE_PROGRAMMING.md** - Assertions, error handling, and validation
-- **COUPLING_AND_COHESION.md** - Managing dependencies and responsibilities
-- **ABSTRACTION_LEVELS.md** - Working at consistent levels of abstraction
-- **CONTROL_FLOW.md** - Conditional logic, loops, and branching
-- **OBJECT_VS_DATA_STRUCTURE.md** - When to use which pattern
-- **BOUNDARY_HANDLING.md** - Working with external code and APIs
-- **CODE_ORGANIZATION.md** - Organizing code within files and modules
+### 1. [Design in Construction](DESIGN_IN_CONSTRUCTION.md)
+**Foundation**: Comprehensive construction-level design principles
 
-## Key Principles
+**Key Topics**:
+- Levels of design (system, subsystem, class, routine, internal)
+- Managing complexity through abstraction
+- Information hiding and encapsulation
+- Coupling and cohesion
+- Design heuristics and patterns
+- Integration with Geist Framework (Ghost/Geyser/Gist)
 
-### Routine Design
-- **Single Responsibility**: Each routine does one thing well
-- **Appropriate Size**: Short enough to understand, complete enough to be useful
-- **Clear Interface**: Parameters and return values make sense
-- **Minimal Coupling**: Few dependencies on other code
+**When to Read**: Before starting any significant implementation, when designing new components, when refactoring complex code.
 
-### Complexity Management
-- **McCabe's Cyclomatic Complexity**: Keep decision points low
-- **Nesting Depth**: Limit to 3-4 levels maximum
-- **Fan-Out**: Limit number of other routines called
-- **Abstraction Levels**: Stay consistent within each routine
+**Word Count**: ~6,500 words | **Examples**: 65+ in Python, TypeScript, Java
 
-### Defensive Programming
-- **Assertions**: Document and verify assumptions
-- **Validation**: Check inputs and preconditions
-- **Error Handling**: Plan for and handle exceptions
-- **Graceful Degradation**: Fail safely and informatively
+### 2. [Pseudocode Programming Process](PSEUDOCODE_PROGRAMMING.md)
+**Technique**: Write comments first, code second
 
-## Quick Start Checklist
+**Key Topics**:
+- Pseudocode-first workflow
+- Design through comments
+- Iterative refinement techniques
+- Pseudocode at different abstraction levels
+- Integration with Geist analysis
 
-Before writing a new routine:
-- [ ] Can you state its single responsibility in one sentence?
-- [ ] Is the level of abstraction appropriate?
-- [ ] Have you planned error handling?
-- [ ] Will it be testable?
+**When to Read**: Before implementing any non-trivial function, when stuck on algorithm design, when reviewing complex code.
 
-During implementation:
-- [ ] Complexity stays manageable (cyclomatic < 10)
-- [ ] Nesting depth stays low (< 4 levels)
-- [ ] Parameters are clear and minimal (< 7)
-- [ ] No hidden dependencies or side effects
+**Word Count**: ~6,000 words | **Examples**: 55+ in Python, TypeScript, Java
 
-During code review:
-- [ ] Each routine has clear responsibility
-- [ ] Error handling is comprehensive
-- [ ] Coupling is minimal and intentional
-- [ ] Code is at consistent abstraction levels
+### 3. [Class Design](CLASS_DESIGN.md)
+**Building Blocks**: Creating high-quality, maintainable classes
 
-## Related Resources
+**Key Topics**:
+- Class organization and structure
+- Single Responsibility Principle
+- Class cohesion and coupling
+- Open-Closed Principle
+- Valid reasons to create classes
+- Encapsulation and information hiding
+- Inheritance vs. composition
 
-- **01-foundations/**: Naming, formatting, and basic principles
-- **03-clean-architecture/**: Higher-level architectural patterns
-- **04-quality-through-testing/**: Testing practices
-- **05-refactoring-and-improvement/**: Improving existing code
-- **99-reference/**: Quick reference checklists
+**When to Read**: When creating new classes, when classes feel too large or unfocused, during code reviews.
+
+**Word Count**: ~6,800 words | **Examples**: 70+ in Python, TypeScript, Java
+
+### 4. [Working Classes](WORKING_CLASSES.md)
+**Practical Implementation**: Day-to-day class construction techniques
+
+**Key Topics**:
+- Constructor design and initialization
+- Immutability patterns
+- Deep copy vs. shallow copy
+- Abstract Data Types (ADTs)
+- Designing for testability
+- Resource management
+- Dependency injection
+
+**When to Read**: When implementing classes, when fixing bugs related to initialization or state, when improving testability.
+
+**Word Count**: ~6,200 words | **Examples**: 60+ in Python, TypeScript, Java
+
+## How to Use These Guides
+
+### For New Developers
+1. Start with **Design in Construction** for foundational principles
+2. Read **Class Design** to understand how to structure classes
+3. Practice with **Pseudocode Programming** on your next function
+4. Reference **Working Classes** when implementing
+
+### For Experienced Developers
+- Use **Pseudocode Programming** for complex algorithms
+- Refer to **Design in Construction** when making architectural decisions
+- Check **Class Design** during code reviews
+- Apply **Working Classes** patterns for testability and maintainability
+
+### For Code Reviews
+1. **Class Design**: Is the class focused? Does it have one responsibility?
+2. **Design in Construction**: Are abstractions appropriate? Is complexity managed?
+3. **Working Classes**: Are constructors correct? Is the class testable?
+4. **Pseudocode Programming**: Could the approach have been clearer with design-first thinking?
+
+## Quick Reference
+
+### Design Heuristics
+- **Manage Complexity**: Hide complexity behind abstractions
+- **Information Hiding**: Expose minimal, stable interfaces
+- **Loose Coupling**: Minimize dependencies between modules
+- **Strong Cohesion**: Keep related responsibilities together
+- **Design for Change**: Isolate likely changes behind boundaries
+
+### Class Design Principles
+- **Small Classes**: Measured by responsibilities, not lines of code
+- **Single Responsibility**: One reason to change
+- **High Cohesion**: Methods use most instance variables
+- **Open-Closed**: Open for extension, closed for modification
+- **Minimal Interface**: Make everything private by default
+
+### Construction Techniques
+- **Comments First**: Design with pseudocode before coding
+- **Immutable by Default**: Prefer immutability for value objects
+- **Dependency Injection**: Pass dependencies, don't create them
+- **Fail Fast**: Validate in constructors, establish invariants
+- **Resource Management**: Acquire in constructor, release in cleanup
+
+## Integration with Other Sections
+
+### Foundations (01-foundations/)
+Design in construction builds on:
+- **Variable Naming**: Classes and functions need good names
+- **Functions and Routines**: Class methods should follow function principles
+- **Error Handling**: Classes must handle errors appropriately
+
+### Clean Architecture (03-clean-architecture/)
+Construction-level design implements:
+- **SOLID Principles**: Classes embody SOLID at implementation level
+- **Dependency Rule**: Construction enforces architectural dependencies
+- **Boundaries**: Classes create and respect boundaries
+
+### Quality Through Testing (04-quality-through-testing/)
+Construction enables testing:
+- **Testability**: Well-designed classes are easy to test
+- **Dependency Injection**: Enables mocking and isolation
+- **Immutability**: Simplifies test fixtures
+
+### Geist Framework Integration
+
+All design-in-code guides integrate the Geist Framework:
+
+**Ghost (Unknown Unknowns)**:
+- Design for requirements you don't know yet
+- Create extension points for future needs
+- Use pseudocode to reveal hidden requirements
+
+**Geyser (Dynamic Forces)**:
+- Design for scalability from the start
+- Anticipate growth and pressure points
+- Build performance into construction decisions
+
+**Gist (Essential Essence)**:
+- Focus on essential complexity
+- Eliminate accidental complexity
+- Keep classes focused on core responsibilities
+
+## Common Questions
+
+**Q: When should I use pseudocode?**
+A: For any non-trivial function (complex algorithm, multiple edge cases, unfamiliar domain, team collaboration needed). Skip it for one-liners and simple operations.
+
+**Q: How do I know if my class is too large?**
+A: If you can't describe its purpose in 25 words without using "and," "or," or "but," it's too large. Measure by responsibilities, not lines of code.
+
+**Q: Should I always make classes immutable?**
+A: Make value objects (Money, Date, etc.) immutable always. For entities (User, Order), use immutability when thread-safety or simplicity is more important than performance.
+
+**Q: How much design should I do upfront?**
+A: Enough to clarify the approach (pseudocode for algorithm, class responsibilities defined), but not so much that you're designing features you don't need yet (YAGNI).
+
+**Q: When should I create a new class?**
+A: When you need to model a concept (real or abstract), reduce/isolate complexity, hide implementation details, limit effects of changes, or group related operations.
+
+## Examples and Code Samples
+
+All guides contain 40-70 code examples each:
+- **Language Coverage**: Python, TypeScript, Java
+- **Patterns**: Both anti-patterns (what not to do) and good patterns (what to do)
+- **Annotations**: Explanations of why changes improve the code
+- **Real-World**: Generic examples applicable to any domain
+
+Total across all guides: **250+ code examples**
+
+## Further Reading
+
+### Primary Sources
+- **Code Complete 2** (Chapters 5-7) - Steve McConnell
+  - Design in construction
+  - High-quality routines
+  - Working classes
+
+- **Clean Code** (Chapters 3, 10) - Robert C. Martin
+  - Functions
+  - Classes
+
+### Related Books
+- **Design Patterns** - Gang of Four
+- **Refactoring** - Martin Fowler
+- **Effective Java** - Joshua Bloch
+- **Domain-Driven Design** - Eric Evans
+
+### Related Guides in This Repository
+- **01-foundations/FUNCTIONS_AND_ROUTINES.md**: Function-level design
+- **03-clean-architecture/SOLID_PRINCIPLES.md**: Architectural principles
+- **04-quality-through-testing/**: Testing well-designed classes
+- **07-geist-gap-analysis-framework/**: Philosophical foundation for design decisions
 
 ## Contributing
 
-These guides focus on construction-level design decisions made while coding:
-- Provide practical decision frameworks
-- Include measurable criteria (complexity metrics, size limits)
-- Show both good and bad examples
-- Keep guidance language-agnostic when possible
+When adding to these guides:
+1. Follow the established structure (Overview, Why It Matters, Source Materials, etc.)
+2. Include code examples in Python, TypeScript, and Java
+3. Show both anti-patterns and good patterns
+4. Integrate with Geist Framework (Ghost/Geyser/Gist)
+5. Keep examples generic and domain-agnostic
+6. Aim for 5,000-7,000 words per guide
+
+---
+
+**Remember**: Design happens during construction, not before or after. Every line of code you write is a design decision. Make those decisions deliberately, with clear principles guiding you. These guides provide the foundation for making excellent construction-level design choices that result in maintainable, testable, and reliable software.

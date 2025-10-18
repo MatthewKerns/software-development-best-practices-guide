@@ -68,35 +68,40 @@ These guides primarily draw from:
 
 ## Guides in This Directory
 
-### Coming Soon
+### Core Guides
 
-**Code Smell Catalogs:**
-- **FUNCTION_SMELLS.md** - Long functions, too many parameters, flag arguments
-- **CLASS_SMELLS.md** - Large classes, feature envy, inappropriate intimacy
-- **COMMENT_SMELLS.md** - Redundant, misleading, or compensating comments
-- **NAME_SMELLS.md** - Unclear, misleading, or inconsistent names
-- **STRUCTURE_SMELLS.md** - Duplicated code, dead code, speculative generality
-- **DATA_SMELLS.md** - Data clumps, primitive obsession, temporary fields
+**[CODE_SMELLS.md](CODE_SMELLS.md)** - Recognizing When Code Needs Improvement
+- Comprehensive catalog of 33+ code smells
+- Comment, environment, function, general, name, and test smells
+- Each smell includes problem description, examples, and refactoring guidance
+- When to refactor vs. tolerate smells
+- 67 before/after code examples across Python, TypeScript, and Java
 
-**Refactoring Techniques:**
-- **EXTRACT_METHOD.md** - Breaking down long functions
-- **RENAME_REFACTORING.md** - Improving names safely
-- **SIMPLIFY_CONDITIONALS.md** - Cleaning up complex logic
-- **REMOVE_DUPLICATION.md** - DRY principle in practice
-- **INTRODUCE_ABSTRACTIONS.md** - Finding the right abstractions
-- **MOVE_RESPONSIBILITIES.md** - Fixing feature envy and misplaced logic
+**[REFACTORING_CATALOG.md](REFACTORING_CATALOG.md)** - Techniques for Code Improvement
+- 23+ proven refactoring techniques
+- Composing methods, moving features, organizing data
+- Simplifying conditionals, dealing with generalization
+- Each refactoring includes problem, solution, motivation, and step-by-step mechanics
+- Code smell to refactoring mapping table
+- 48 detailed before/after transformations
 
-**Refactoring Strategies:**
-- **SAFE_REFACTORING.md** - Testing, small steps, continuous integration
-- **BOY_SCOUT_RULE.md** - Incremental improvement approach
-- **REFACTORING_VS_REWRITING.md** - When to refactor vs. start over
-- **TECHNICAL_DEBT_MANAGEMENT.md** - Tracking and paying down debt
-- **REFACTORING_LEGACY_CODE.md** - Working with code that lacks tests
+**[REFACTORING_WORKFLOW.md](REFACTORING_WORKFLOW.md)** - Safe Code Improvement Process
+- 7-step core refactoring workflow
+- Test-driven refactoring approach
+- Handling legacy code (characterization tests, seams, breaking dependencies)
+- Advanced scenarios (large classes, team environments, time pressure)
+- Common pitfalls and how to avoid them
+- Decision framework: when to refactor vs. rewrite
+- 31 workflow demonstration examples
 
-**Improvement Practices:**
-- **CODE_REVIEW_CHECKLIST.md** - Systematic review for improvement
-- **CONTINUOUS_IMPROVEMENT.md** - Building improvement into workflow
-- **METRICS_FOR_IMPROVEMENT.md** - Measuring code quality trends
+**[CONTINUOUS_IMPROVEMENT.md](CONTINUOUS_IMPROVEMENT.md)** - Building Quality into Your Workflow
+- Boy Scout Rule: always leave code cleaner than you found it
+- Preparatory and opportunistic refactoring patterns
+- Don't live with broken windows philosophy
+- Daily/weekly improvement rituals and checklists
+- Team practices: collective ownership, pairing, tech debt register
+- Quality gates and metrics-driven improvement
+- 39 practical improvement pattern examples
 
 ## Key Principles
 

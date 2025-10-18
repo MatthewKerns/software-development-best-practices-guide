@@ -170,7 +170,7 @@ When using a quick reference:
 - **04-quality-through-testing/**: Testing practices
 - **05-refactoring-and-improvement/**: Code smells and refactoring
 - **06-collaborative-construction/**: Team practices
-- **07-geist-framework/**: Three-dimensional analysis
+- **07-geist-gap-analysis-framework/**: Three-dimensional analysis
 - **08-project-management/**: Planning and organization
 
 ### Integration Points
