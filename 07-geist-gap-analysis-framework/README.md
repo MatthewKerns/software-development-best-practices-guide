@@ -124,9 +124,10 @@ The Geist Framework synthesizes concepts from:
 ## Current Guides
 
 ### Available Now
-- **DESIGN_INVESTIGATION_GUIDANCE.md** - Applying Geist to design investigations
-- **GEIST_COPILOT_INSTRUCTIONS.md** - Using Geist with AI assistants
 - **GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md** - Comprehensive framework documentation
+- **GEIST_COPILOT_INSTRUCTIONS.md** - Using Geist with AI assistants
+- **DESIGN_INVESTIGATION_GUIDANCE.md** - Applying Geist to design investigations
+- **CONTINUOUS_GAP_ANALYSIS.md** ✨ **NEW** - Systematic gap analysis from vision to implementation
 
 ### Coming Soon
 - **GEIST_REQUIREMENTS_ANALYSIS.md** - Three-dimensional requirements gathering
