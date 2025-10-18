@@ -69,6 +69,24 @@ Design happens continuously during coding. Every class you create, every functio
 
 **Word Count**: ~6,200 words | **Examples**: 60+ in Python, TypeScript, Java
 
+### 5. [UI Design Best Practices](UI_DESIGN_BEST_PRACTICES.md)
+**Interface Design**: Building beautiful, accessible, maintainable user interfaces
+
+**Key Topics**:
+- Atomic Design methodology (Atoms → Molecules → Organisms → Templates → Pages)
+- Visual hierarchy and layout systems
+- 8pt spacing & sizing systems
+- Typography scales and line height
+- HSL color management & comprehensive palettes
+- Component design patterns
+- WCAG 2.2 accessibility compliance
+- Responsive design principles
+- Framework-agnostic approaches
+
+**When to Read**: Before designing UI components, when establishing design systems, during UI code reviews, when improving accessibility.
+
+**Word Count**: ~9,500 words | **Source**: Atomic Design (Brad Frost), Refactoring UI (Wathan & Schoger), WCAG 2.2
+
 ## How to Use These Guides
 
 ### For New Developers
@@ -76,18 +94,21 @@ Design happens continuously during coding. Every class you create, every functio
 2. Read **Class Design** to understand how to structure classes
 3. Practice with **Pseudocode Programming** on your next function
 4. Reference **Working Classes** when implementing
+5. Study **UI Design Best Practices** before building user interfaces
 
 ### For Experienced Developers
 - Use **Pseudocode Programming** for complex algorithms
 - Refer to **Design in Construction** when making architectural decisions
 - Check **Class Design** during code reviews
 - Apply **Working Classes** patterns for testability and maintainability
+- Follow **UI Design Best Practices** for design system development
 
 ### For Code Reviews
 1. **Class Design**: Is the class focused? Does it have one responsibility?
 2. **Design in Construction**: Are abstractions appropriate? Is complexity managed?
 3. **Working Classes**: Are constructors correct? Is the class testable?
 4. **Pseudocode Programming**: Could the approach have been clearer with design-first thinking?
+5. **UI Design Best Practices**: Does the UI follow Atomic Design? Is it accessible (WCAG 2.2)? Does spacing use the 8pt grid?
 
 ## Quick Reference
 
@@ -111,6 +132,14 @@ Design happens continuously during coding. Every class you create, every functio
 - **Dependency Injection**: Pass dependencies, don't create them
 - **Fail Fast**: Validate in constructors, establish invariants
 - **Resource Management**: Acquire in constructor, release in cleanup
+
+### UI Design Principles
+- **Atomic Design**: Build systems from atoms → molecules → organisms → templates → pages
+- **8pt Grid System**: Use multiples of 8 for all spacing and sizing
+- **Visual Hierarchy**: Size, weight, color (not size alone)
+- **HSL Colors**: Comprehensive palettes with 9+ shades per color
+- **WCAG 2.2 Compliance**: 4.5:1 contrast, keyboard accessible, 24×24px touch targets
+- **Mobile-First**: Design for smallest screens, enhance for larger
 
 ## Integration with Other Sections
 
@@ -171,12 +200,12 @@ A: When you need to model a concept (real or abstract), reduce/isolate complexit
 ## Examples and Code Samples
 
 All guides contain 40-70 code examples each:
-- **Language Coverage**: Python, TypeScript, Java
+- **Language Coverage**: Python, TypeScript, Java (backend guides); HTML, CSS, JavaScript (UI guide)
 - **Patterns**: Both anti-patterns (what not to do) and good patterns (what to do)
 - **Annotations**: Explanations of why changes improve the code
 - **Real-World**: Generic examples applicable to any domain
 
-Total across all guides: **250+ code examples**
+Total across all guides: **300+ code examples**
 
 ## Further Reading
 
@@ -189,6 +218,14 @@ Total across all guides: **250+ code examples**
 - **Clean Code** (Chapters 3, 10) - Robert C. Martin
   - Functions
   - Classes
+
+- **Atomic Design** - Brad Frost
+  - Component hierarchy methodology
+  - Design systems thinking
+
+- **Refactoring UI** - Adam Wathan & Steve Schoger
+  - Visual hierarchy and spacing
+  - Typography and color systems
 
 ### Related Books
 - **Design Patterns** - Gang of Four
