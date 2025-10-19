@@ -30,6 +30,60 @@ Target: Stay under 200K per conversation turn
 Strategy: Distribute across N specialized agents running in parallel
 ```
 
+**Optimal Refactoring Timing (Context Window Sweet Spot):**
+
+The best time to refactor is when the context window contains rich pattern recognition data but allows sufficient headroom for completion:
+
+```
+Context Window Zones for Refactoring:
+
+|--------------|-----------------|---------------------|------------|
+0K            60K              120K                 180K        200K
+│   Too Early  │  OPTIMAL ZONE   │  Acceptable but      │  Too Late  │
+│   (No        │  (Rich context  │  risky (limited      │  (Auto-    │
+│   patterns)  │  + headroom)    │  headroom)           │  compact)  │
+└──────────────┴─────────────────┴──────────────────────┴────────────┘
+
+Optimal Refactoring Window: 60-120K context usage
+• Rich enough: Sufficient code patterns loaded for recognition
+• Safe enough: 80-140K headroom prevents context overflow
+• Efficient: Refactoring completes before auto-compacting
+```
+
+**Why This Window Works:**
+
+1. **Pattern Recognition (60K+ context)**:
+   - Multiple modules loaded → can identify DRY violations
+   - Repeated code patterns become visible
+   - Cross-module dependencies clear
+   - Utility extraction opportunities evident
+
+2. **Completion Safety (120K max usage)**:
+   - 80K+ headroom for refactoring work
+   - Room for import updates and validation
+   - Buffer for test execution
+   - Prevents mid-refactor context loss
+
+3. **Auto-Compacting Prevention**:
+   - Refactoring generates significant new context (import updates, extractions, tests)
+   - Starting at 120K+ risks hitting 200K limit mid-refactor
+   - Auto-compacting during refactor = lost pattern context
+   - Lost context = incomplete or incorrect refactoring
+
+**Timing Indicators for Refactoring:**
+
+✅ **Good time to refactor:**
+- 2-3 modules implemented (pattern recognition possible)
+- Context usage: 60-120K (safe headroom)
+- Duplicated code patterns visible across modules
+- Before implementing next major module
+
+❌ **Bad time to refactor:**
+- Only 1 module implemented (no patterns yet)
+- Context usage >150K (risky, low headroom)
+- Mid-implementation (incomplete module state)
+- Just after major context-heavy operations
+
 ### 2. Time Efficiency via Strategic Parallelization
 
 **Independent Tasks → Parallel Execution:**
@@ -118,6 +172,139 @@ Final refactor Module C (10 min)
 Total: 60 minutes (33% faster)
 ```
 
+### Pre-Emptive Import Management During Refactoring
+
+**CRITICAL: Update imports proactively when refactoring to prevent broken references**
+
+Refactoring often moves code between files. Pre-emptive import updates prevent cascading failures:
+
+**The Problem:**
+```python
+# Old Structure (before refactor):
+# auth.py
+def validate_token(token):
+    # implementation
+
+def create_session(user):
+    # implementation
+
+# api.py
+from auth import validate_token, create_session
+```
+
+**Reactive Approach (WRONG - causes failures):**
+```python
+# Step 1: Extract to utils (imports break immediately!)
+# auth_utils.py
+def validate_token(token):
+    # implementation moved here
+
+# auth.py (still has create_session)
+def create_session(user):
+    # implementation
+
+# api.py - BROKEN! validate_token import fails
+from auth import validate_token, create_session  # ❌ validate_token no longer here
+```
+
+**Pre-Emptive Approach (CORRECT - maintains functionality):**
+```python
+# Step 1: Create new file with extracted code
+# auth_utils.py
+def validate_token(token):
+    # implementation moved here
+
+# Step 2: IMMEDIATELY update all imports before removing old code
+# api.py - Updated imports first
+from auth_utils import validate_token  # ✅ Updated proactively
+from auth import create_session
+
+# Step 3: NOW safe to remove from old location
+# auth.py (cleaned up)
+def create_session(user):
+    # implementation
+```
+
+**Pre-Emptive Import Update Workflow:**
+
+1. **Before Extraction:**
+   - Search entire codebase for all imports of target code
+   - Document every file that imports the code being moved
+   - Plan import updates for each affected file
+
+2. **During Extraction:**
+   - Create new file with extracted code
+   - **IMMEDIATELY update all imports** in consuming files
+   - Verify imports resolve correctly (IDE checks, type checking)
+
+3. **After Extraction:**
+   - Remove code from old location
+   - Run tests to validate no broken references
+   - Commit atomically (extraction + import updates together)
+
+**Automated Import Search Pattern:**
+
+```bash
+# Before refactoring utils.py → extract to validators.py
+# Search for all imports of code being moved:
+
+grep -r "from utils import.*validate" .
+grep -r "from utils import \*" .
+grep -r "import utils" .
+
+# Document results:
+# - api/routes.py: from utils import validate_email, validate_phone
+# - services/user.py: from utils import validate_email
+# - tests/test_api.py: from utils import validate_email, validate_phone
+
+# Update ALL these files BEFORE removing validate_* from utils.py
+```
+
+**Import Update Checklist:**
+
+- [ ] Search codebase for all imports of code being refactored
+- [ ] Create list of files requiring import updates
+- [ ] Create new file/location with extracted code
+- [ ] Update imports in ALL consuming files (not just obvious ones)
+- [ ] Verify imports resolve (IDE, linter, type checker)
+- [ ] Run tests to confirm no import errors
+- [ ] Remove code from old location only after imports updated
+- [ ] Commit extraction + import updates atomically
+
+**Anti-Pattern: Reactive Import Updates**
+
+❌ **Don't:**
+```
+1. Extract code to new location
+2. Remove from old location
+3. See what breaks
+4. Fix imports one by one as errors appear
+```
+
+This causes:
+- Cascading test failures
+- CI/CD pipeline failures
+- Wasted context on error debugging
+- Potential missed imports in untested code paths
+
+✅ **Do:**
+```
+1. Search for all imports of target code
+2. Create new location with extracted code
+3. Update ALL imports pre-emptively
+4. Verify imports resolve
+5. Remove from old location
+6. Tests pass on first run
+```
+
+**Context Window Benefit:**
+
+Pre-emptive import updates prevent context waste:
+- No context spent on "why are tests failing?"
+- No context spent debugging import errors
+- No context spent finding missed imports
+- Refactoring completes in single pass without back-and-forth
+
 ### Strategic Refactoring Points (When to Parallelize)
 
 **✅ Safe to Parallel:**
@@ -126,17 +313,19 @@ Total: 60 minutes (33% faster)
 3. **Pattern Extraction:** Extract utilities from Module A while building Module B
 4. **Test Refactoring:** Refactor test utilities while implementing new features
 5. **Documentation Refactoring:** Update docs for Module A while coding Module B
+6. **Pre-emptive Import Updates:** Update all imports before removing old code (prevents breakage)
 
 **❌ Must Be Sequential:**
 1. **Cross-Module Dependencies:** Refactoring shared utilities that Module B depends on
 2. **API Contract Changes:** Refactoring interfaces that affect multiple modules
 3. **Architecture Shifts:** Moving from pattern X to pattern Y across codebase
 4. **Breaking Changes:** Refactoring that requires coordinated updates everywhere
+5. **Import Updates:** Must complete before removing old code (prevents cascading failures)
 
 ### Implementation Pattern: Strategic Refactoring Workflow
 
 ```python
-# Coordination meta-agent orchestrates strategic refactoring
+# Coordination meta-agent orchestrates strategic refactoring with pre-emptive import updates
 
 async def strategic_refactoring_workflow():
     # Phase 1: Implement first module
@@ -145,12 +334,31 @@ async def strategic_refactoring_workflow():
         'features': ['login', 'logout', 'session_management']
     })
 
+    # Context check before refactoring
+    context_usage = estimate_context_usage()
+    if context_usage > 120_000:  # >120K = risky for refactoring
+        raise ContextWindowError("Context too full for safe refactoring. Spawn new agent.")
+
     # Phase 2: PARALLEL - Refactor Module A + Implement Module B
+    # Context usage: ~60-90K (safe zone for refactoring)
     refactor_task, implement_task = await asyncio.gather(
         spawn_agent('refactoring-specialist', {
             'scope': 'authentication_module',
             'target': 'extract_common_patterns',
-            'outputs': ['auth_utils.py', 'session_manager.py']
+            'outputs': ['auth_utils.py', 'session_manager.py'],
+            # CRITICAL: Pre-emptive import management
+            'pre_refactor_steps': [
+                'search_all_imports',  # Find all files importing auth code
+                'document_import_locations',  # List files to update
+                'plan_import_updates'  # Plan new import statements
+            ],
+            'refactor_steps': [
+                'create_new_files',  # auth_utils.py, session_manager.py
+                'update_all_imports_first',  # Update imports BEFORE removing code
+                'verify_imports_resolve',  # Check IDE/linter confirms imports work
+                'remove_old_code',  # Only after imports updated
+                'run_tests'  # Validate no import errors
+            ]
         }),
         spawn_agent('code-implementor', {
             'module': 'authorization',
@@ -163,7 +371,8 @@ async def strategic_refactoring_workflow():
     test_task, implement_c_task = await asyncio.gather(
         spawn_agent('integration-tester', {
             'modules': ['authentication', 'authorization'],
-            'test_refactored_patterns': True
+            'test_refactored_patterns': True,
+            'verify_imports': True  # Ensure all imports resolved correctly
         }),
         spawn_agent('code-implementor', {
             'module': 'audit_logging',
@@ -172,16 +381,26 @@ async def strategic_refactoring_workflow():
     )
 
     # Phase 4: Final cross-cutting refactoring (SEQUENTIAL - affects all modules)
+    # IMPORTANT: Pre-emptive import search critical for cross-cutting changes
     final_refactor = await spawn_agent('refactoring-specialist', {
         'scope': 'all_modules',
         'target': 'consolidate_error_handling',
-        'modules': ['authentication', 'authorization', 'audit_logging']
+        'modules': ['authentication', 'authorization', 'audit_logging'],
+        'pre_refactor_steps': [
+            'grep -r "from .* import.*Error" .',  # Find all error imports
+            'grep -r "import.*exceptions" .',  # Find exception imports
+            'document_all_error_usages'  # Map where errors are used
+        ],
+        'import_update_strategy': 'pre_emptive',  # Update before removing
+        'atomic_commit': True  # Extraction + imports in one commit
     })
 
     return {
         'time_saved': '30%',
-        'pattern': 'strategic_parallel_refactoring',
-        'modules_affected': ['auth', 'authz', 'audit']
+        'pattern': 'strategic_parallel_refactoring_with_import_safety',
+        'modules_affected': ['auth', 'authz', 'audit'],
+        'import_errors': 0,  # Pre-emptive updates prevent import failures
+        'context_efficiency': 'high'  # No context wasted on debugging imports
     }
 ```
 
@@ -195,19 +414,30 @@ async def strategic_refactoring_workflow():
 - Local refactoring (within one module) → PARALLEL with other module work
 - Global refactoring (cross-cutting concerns) → SEQUENTIAL (all modules affected)
 
-**Rule 3: Milestone-Based Refactoring**
+**Rule 3: Context Window Timing**
+- **60-120K context usage**: OPTIMAL for refactoring (pattern recognition + headroom)
+- **<60K context usage**: Too early (insufficient patterns visible)
+- **>120K context usage**: Too risky (spawn new agent or delegate to specialized agent)
+
+**Rule 4: Pre-Emptive Import Management**
+- **Before extraction**: Search all imports of code being moved
+- **During extraction**: Update imports BEFORE removing old code
+- **After extraction**: Verify imports + run tests
+- **Never**: Remove code first, fix imports reactively
+
+**Rule 5: Milestone-Based Refactoring**
 ```
-Milestone 1: Core features implemented
+Milestone 1: Core features implemented (Context: ~70K)
   ↓
-Refactor Agent (extract patterns) ∥ Implement Agent (additional features)
+Refactor Agent (extract patterns + update imports) ∥ Implement Agent (additional features)
   ↓
-Milestone 2: Advanced features implemented
+Milestone 2: Advanced features implemented (Context: ~90K)
   ↓
-Refactor Agent (consolidate patterns) ∥ Test Agent (comprehensive testing)
+Refactor Agent (consolidate patterns + update imports) ∥ Test Agent (comprehensive testing)
   ↓
-Milestone 3: All features complete
+Milestone 3: All features complete (Context: ~110K)
   ↓
-Final Refactor (cross-cutting, sequential)
+Final Refactor (cross-cutting, sequential, pre-emptive import updates)
 ```
 
 ---
@@ -648,6 +878,7 @@ Context: Well-distributed, no overflow
    - Coordination agent stays minimal (<20K)
    - Use file references, not content copies
    - Target: <200K per conversation turn
+   - **Optimal refactoring window: 60-120K context** (pattern recognition + safe headroom)
 
 2. **Time Efficiency Optimization:**
    - Parallelize: Analysis, verification, documentation, independent modules
@@ -657,15 +888,31 @@ Context: Well-distributed, no overflow
 3. **Strategic Refactoring:**
    - **Milestone-based checkpoints** enable parallel refactoring
    - Refactor Module A while implementing Module B (if isolated)
+   - **Optimal timing: 60-120K context usage** (rich patterns + completion headroom)
    - Prevents technical debt accumulation
    - Enables pattern reuse in subsequent modules
    - Cross-cutting refactoring stays sequential (affects all modules)
+   - **Pre-emptive import updates ALWAYS** (update before removing code)
 
-4. **Practical Guidelines:**
+4. **Pre-Emptive Import Management:**
+   - **Before refactoring**: Search entire codebase for all imports
+   - **During refactoring**: Update ALL imports before removing old code
+   - **After refactoring**: Verify imports + run tests
+   - **Never**: Remove code first, fix imports reactively
+   - **Benefit**: Zero import errors, no wasted context on debugging
+
+5. **Context Window Timing for Refactoring:**
+   - **Too Early (<60K)**: Insufficient pattern recognition
+   - **Optimal (60-120K)**: Rich context + safe headroom
+   - **Risky (>120K)**: Limited headroom, spawn new agent instead
+   - **Too Late (>150K)**: High risk of auto-compacting mid-refactor
+
+6. **Practical Guidelines:**
    - Always parallel: Analysis, verification, docs
    - **Strategic parallel: Refactoring at milestones during implementation**
    - Always sequential: Same files, data dependencies, cross-cutting changes
    - Budget context before spawning agents
+   - **Check context usage before refactoring** (60-120K = green light)
 
 5. **Anti-Pattern Avoidance:**
    - Don't: Monolithic refactoring at the end
