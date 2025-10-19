@@ -71,6 +71,11 @@ These guides draw from:
 ### Available Now
 - **INTEGRATION_PLAYBOOK_GUIDE.md** - Comprehensive integration workflow guide
 - **INTEGRATION_PLAYBOOK_QUICK_REFERENCE.md** - Quick reference for integration
+- **CODE_REVIEWS.md** - Code review best practices and processes
+- **PAIR_PROGRAMMING.md** - Effective pair programming techniques
+- **COLLABORATIVE_DEBUGGING.md** - Team debugging strategies
+- **WORKING_WITH_CODING_AGENTS.md** - Human-AI collaboration patterns
+- **AGENTIC_CODING_OPTIMIZATION.md** - Context window & time efficiency optimization for agentic workflows
 
 ### Coming Soon
 
@@ -103,6 +108,13 @@ These guides draw from:
 - **TECHNICAL_DECISION_RECORDS.md** - Documenting architectural decisions
 - **TEAM_LEARNING.md** - Continuous learning practices
 
+**Agentic Coding (AI Collaboration):**
+- ✅ **WORKING_WITH_CODING_AGENTS.md** - Human-AI collaboration patterns
+- ✅ **AGENTIC_CODING_OPTIMIZATION.md** - Parallel execution, context window optimization, strategic refactoring
+- **PROMPT_ENGINEERING_FOR_CODE.md** - Effective prompting strategies
+- **AI_CODE_REVIEW.md** - Using AI for code review assistance
+- **AGENT_DELEGATION_PATTERNS.md** - When and how to delegate to specialized agents
+
 ## Key Principles
 
 ### Code Review Best Practices
@@ -133,6 +145,13 @@ These guides draw from:
 - **Fast feedback**: Failed builds notify immediately
 - **Never break the build**: Keep main branch always working
 
+### Agentic Coding Optimization
+- **Parallelize strategically**: Run independent tasks in parallel (analysis, verification, docs)
+- **Context budgeting**: Distribute context across specialized agents (<200K per turn)
+- **Strategic refactoring**: Refactor completed Module A while implementing Module B
+- **Checkpoint-based**: Refactor at milestones, not monolithically at the end
+- **Agent delegation**: Use specialized sub-agents for focused context (15-80K each)
+
 ## Quick Start Checklist
 
 For code reviews:
@@ -162,6 +181,13 @@ For team standards:
 - [ ] Review standards quarterly
 - [ ] Apply consistently across team
 - [ ] Update based on team retrospectives
+
+For agentic coding:
+- [ ] Identify parallelizable tasks (analysis, verification, docs)
+- [ ] Budget context across specialized agents
+- [ ] Use strategic refactoring at milestones
+- [ ] Delegate to sub-agents for focused tasks
+- [ ] Coordinate with meta-agent for 3+ sub-agents
 
 ## Related Resources
 

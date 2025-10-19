@@ -147,6 +147,45 @@ Tool Pattern (`docs/adr/ADR_005_*`), TDD (`code_quality_practices/TDD_*`), Async
 **Error Handling:** Structured errors with recovery strategies, no backwards compatibility
 **Test-Driven Gap Resolution (MANDATORY when tests fail):** 1. Document gaps with GAP-[ID] in `docs/decision-history/gaps/` 2. Categorize by severity 3. Create resolution plan 4. TDD loop to close gaps 5. Validate all resolved. **Reference:** `docs/quality-through-testing/TEST_DRIVEN_GAP_RESOLUTION.md`
 
+## Context Window & Time Efficiency Optimization
+
+**MANDATORY: Optimize for both time efficiency and context window usage in all agentic workflows**
+
+**Complete Guide:** `06-collaborative-construction/AGENTIC_CODING_OPTIMIZATION.md`
+
+### Quick Reference
+
+**Parallel Execution (Time + Context Optimization):**
+- Independent analysis (security, performance, requirements)
+- Different documentation types (API, user, architecture)
+- Separate verification domains (tests, coverage, benchmarks)
+- Non-overlapping modules (frontend + backend)
+- **Strategic refactoring: Refactor completed Module A while implementing Module B**
+
+**Sequential Execution (Prevent Conflicts):**
+- Same file modifications (merge conflict prevention)
+- Data dependencies (Task B needs Task A output)
+- Cross-cutting refactoring (affects all modules)
+- Database migrations (order-dependent)
+
+**Strategic Refactoring Pattern:**
+```
+Implement Module A
+  ↓
+┌─────────────────────────┬─────────────────────────┐
+│ Refactor Module A       │ Implement Module B      │
+│ (extract patterns)      │ (new functionality)     │
+└─────────────────────────┴─────────────────────────┘
+  ↓
+Module C benefits from refactored patterns (faster implementation)
+```
+
+**Context Budgeting:**
+- Coordination agent: ~20K (orchestration)
+- Specialized agents: 15-80K each (focused tasks)
+- Target: <200K per conversation turn
+- Strategy: Distribute across N parallel agents
+
 ## Implementation Plan Requirements
 
 **MANDATORY: Use template for plans >4 hours**
@@ -297,7 +336,10 @@ Central orchestrator managing parallel execution, conflict resolution, and quali
 
 **Development & Code Quality:**
 - **code-conciser**: Redundancy removal, expression simplification (Sequential only)
-- **refactoring-specialist**: Large-scale refactoring, architecture improvements (Sequential only)
+- **refactoring-specialist**: Large-scale refactoring, architecture improvements (Strategic parallel at milestones, Sequential for cross-cutting)
+  - **Strategic Parallel Mode**: Refactor completed Module A while implementing Module B (milestone-based)
+  - **Sequential Mode**: Cross-cutting refactoring affecting all modules, API contract changes
+  - **Reference**: `06-collaborative-construction/AGENTIC_CODING_OPTIMIZATION.md` for strategic refactoring patterns
 - **tdd-implementor**: Red-Green-Refactor workflow, 85%+ coverage, **test-driven gap resolution** (Conditional parallel)
   - **Gap Resolution Mode**: When tests uncover implementation issues, systematically documents gaps (GAP-[ID]), creates resolution plans, and uses TDD loop to close each gap
   - **Deliverables**: Gap documentation in `docs/decision-history/gaps/`, comprehensive resolution plan, all gaps resolved with passing tests
@@ -358,9 +400,25 @@ Gap + Docs + Performance + Traceability (Parallel)
 
 ### Parallel Execution Strategy
 
-**Always Parallel:** Security+Codebase+Test planning (Phase 2); Gap+Docs+Performance+Traceability (Phase 3); UI testing suite; Problem investigation
-**Never Parallel:** Sequential dependencies, shared state/file conflicts; Database operations; Code refactoring agents
-**Conditional:** Frontend+Backend (no shared state); DB+API (finalized schemas); Tests+Docs (stable scope)
+**Complete Guide:** `06-collaborative-construction/AGENTIC_CODING_OPTIMIZATION.md`
+
+**Always Parallel:**
+- Security+Codebase+Test planning (Phase 2)
+- Gap+Docs+Performance+Traceability (Phase 3)
+- UI testing suite
+- Problem investigation
+- **Strategic refactoring: Refactor completed modules while implementing new modules (milestone-based)**
+
+**Never Parallel:**
+- Sequential dependencies, shared state/file conflicts
+- Database operations
+- **Cross-cutting refactoring (affects all modules)**
+
+**Conditional:**
+- Frontend+Backend (no shared state)
+- DB+API (finalized schemas)
+- Tests+Docs (stable scope)
+- **Module-based refactoring (refactor Module A while implementing Module B if isolated)**
 
 ### Sub-Agent Coordination
 
@@ -1008,13 +1066,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 **❌ Don't:**
 - Use database-migrator in parallel with other implementation agents
 - Skip root-cause-finder for mysterious production issues
-- Run code-conciser and refactoring-specialist simultaneously
+- Run code-conciser and refactoring-specialist simultaneously **on same modules**
 - Use UI agents without proper browser environment setup
 - Ignore parallel safety flags in complex workflows
 - Disable auto-recovery in production validation
 - Exceed 3 auto-recovery attempts without escalation
 - Skip Geist analysis for feature gap detection
 - Implement features without TDD in gap resolution workflow
+- **Wait until end to refactor everything (monolithic refactoring anti-pattern)**
+- **Run cross-cutting refactoring in parallel (affects all modules)**
 
 **✅ Do:**
 - Use coordination meta-agent for 3+ specialized agents
@@ -1026,6 +1086,9 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 - Document all auto-recovery actions for audit trail
 - Use Feature Gap Resolution Workflow for incomplete implementations
 - Always validate feature completeness with Geist analyzer
+- **Use strategic refactoring: Refactor completed Module A while implementing Module B**
+- **Checkpoint-based refactoring at milestones (prevents technical debt accumulation)**
+- **See `06-collaborative-construction/AGENTIC_CODING_OPTIMIZATION.md` for optimization patterns**
 
 ## Commit Protocol
 
