@@ -1,6 +1,6 @@
 {
   "name": "@matthewkerns/software-development-best-practices-guide",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A comprehensive, project-agnostic guide synthesizing principles from Code Complete 2, Clean Code, and Clean Architecture",
   "main": "index.js",
   "repository": {
