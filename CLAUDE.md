@@ -77,7 +77,15 @@ async def api_operation_tool(param1: str, param2: str) -> dict:
 ### TDD Approach
 - **Development TDD**: Real components + real dependencies for new features
 - **Unit TDD**: Real component + mocked dependencies for behavior testing
+- **Test-Driven Gap Resolution**: When tests uncover implementation gaps, document them systematically and create comprehensive resolution plans (see `docs/quality-through-testing/TEST_DRIVEN_GAP_RESOLUTION.md`)
 - **Direct debugging**: Debug statements in production code for quick validation
+
+**Gap Resolution Protocol (MANDATORY when tests reveal issues):**
+1. Document discovered gaps with GAP-[ID] format in `docs/decision-history/gaps/`
+2. Categorize by severity (Critical/High/Medium/Low)
+3. Create gap resolution plan following template
+4. Use TDD loop (RED-GREEN-REFACTOR) to close each gap
+5. Validate all gaps resolved before proceeding
 
 ### Async Compliance
 All LangGraph workflows must be fully async:
@@ -137,6 +145,7 @@ Tool Pattern (`docs/adr/ADR_005_*`), TDD (`code_quality_practices/TDD_*`), Async
 **Database Migrations (MANDATORY):** 1. Follow `docs/DATABASE_MIGRATION_GUIDE.md` 2. Numbered SQL in `migrations/` 3. Test on dev first 4. Python for complex 5. Validation queries + logging 6. Update docs
 **Pattern:** `asyncio, asyncpg; conn = await asyncpg.connect(os.getenv("NEON_DATABASE_URL"))` + error handling
 **Error Handling:** Structured errors with recovery strategies, no backwards compatibility
+**Test-Driven Gap Resolution (MANDATORY when tests fail):** 1. Document gaps with GAP-[ID] in `docs/decision-history/gaps/` 2. Categorize by severity 3. Create resolution plan 4. TDD loop to close gaps 5. Validate all resolved. **Reference:** `docs/quality-through-testing/TEST_DRIVEN_GAP_RESOLUTION.md`
 
 ## Implementation Plan Requirements
 
@@ -289,7 +298,10 @@ Central orchestrator managing parallel execution, conflict resolution, and quali
 **Development & Code Quality:**
 - **code-conciser**: Redundancy removal, expression simplification (Sequential only)
 - **refactoring-specialist**: Large-scale refactoring, architecture improvements (Sequential only)
-- **tdd-implementor**: Red-Green-Refactor workflow, 85%+ coverage, gap resolution (Conditional parallel)
+- **tdd-implementor**: Red-Green-Refactor workflow, 85%+ coverage, **test-driven gap resolution** (Conditional parallel)
+  - **Gap Resolution Mode**: When tests uncover implementation issues, systematically documents gaps (GAP-[ID]), creates resolution plans, and uses TDD loop to close each gap
+  - **Deliverables**: Gap documentation in `docs/decision-history/gaps/`, comprehensive resolution plan, all gaps resolved with passing tests
+  - **Reference**: `docs/quality-through-testing/TEST_DRIVEN_GAP_RESOLUTION.md`
 
 **Validation & Completeness:**
 - **exactly-right**: Comprehensive implementation validation and bug prevention after development phases. **MANDATORY coordination with requirements-analyzer and gap-analyzer for complete validation coverage.** Works in unison to ensure zero-defect code through systematic requirement verification, gap analysis, and implementation auditing (Sequential after implementation, Parallel with analysis agents)
@@ -567,6 +579,64 @@ Production readiness verification:
 • requirements-analyzer: 100% acceptance criteria satisfied
 ↓
 PRODUCTION READY → Feature Complete with Full Data Visibility
+```
+
+#### Example 9: Test-Driven Gap Resolution Workflow
+```
+User: "Run comprehensive tests and fix all discovered implementation gaps"
+↓
+test-runner (execute full test suite)
+• 127 tests run
+• 15 tests failing
+• Gaps discovered in authentication, data validation, edge cases
+↓
+gap-analyzer (categorize failures)
+• CRITICAL: 2 gaps (authentication bypass, data loss potential)
+• HIGH: 5 gaps (incomplete validation, missing error handling)
+• MEDIUM: 6 gaps (edge cases)
+• LOW: 2 gaps (enhancements)
+↓
+Create Gap Resolution Plan:
+• Document all 15 gaps with GAP-[ID] format
+• Prioritize: Critical → High → Medium → Low
+• Create resolution plan in docs/decision-history/gaps/
+• Estimated effort: 12 hours
+↓
+tdd-implementor (gap resolution mode)
+FOR EACH GAP (prioritized order):
+  ↓
+  RED: Verify test fails for documented reason
+  • GAP-001: test_auth_bypass fails - no token validation
+  ↓
+  GREEN: Minimal implementation
+  • Add token validation to auth middleware
+  • Test now passes
+  ↓
+  REFACTOR: Clean up code
+  • Extract validation logic to utility
+  • Add comprehensive error messages
+  ↓
+  gap-analyzer: Verify gap closed
+  • GAP-001 status: RESOLVED
+  • No new gaps introduced
+  • All related tests passing
+  ↓
+  NEXT GAP → Repeat cycle
+↓
+Final Validation:
+• exactly-right: Zero-defect validation
+• gap-analyzer: All 15 gaps RESOLVED
+• quality-gate-validator: 127/127 tests passing, 89% coverage
+↓
+Gap Resolution Report:
+• All critical gaps resolved (2/2)
+• All high priority gaps resolved (5/5)
+• All medium gaps resolved (6/6)
+• Low priority gaps resolved (2/2)
+• Total resolution time: 11.5 hours
+• Documentation: Complete gap history preserved
+↓
+TESTING COMPLETE → All Gaps Resolved
 ```
 
 ## UI Bar Raiser Automated Recovery Workflow
