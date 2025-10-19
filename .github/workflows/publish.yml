@@ -2,6 +2,8 @@ name: Publish to GitHub Packages
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -10,12 +12,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,7 +28,29 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@matthewkerns'
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version (patch)
+        id: version
+        run: |
+          # Only bump version on main branch pushes (not tags)
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            npm version patch -m "chore: bump version to %s [skip ci]"
+            echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+            git push --follow-tags
+          else
+            echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish to GitHub Packages
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release Notes
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Published version ${{ steps.version.outputs.version }} to GitHub Packages"
