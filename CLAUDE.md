@@ -186,17 +186,47 @@ Module C benefits from refactored patterns (faster implementation)
 - Target: <200K per conversation turn
 - Strategy: Distribute across N parallel agents
 
-## Implementation Plan Requirements
+## Business Requirements & Implementation Planning
 
-**MANDATORY: Use template for plans >4 hours**
+### Business Requirements Document (BRD)
+
+**MANDATORY: Create BRD before implementation planning for features >3 days effort**
+
+**Purpose:** Define WHAT needs to be built and WHY (business value), not HOW (technical implementation)
+
+**Template:** `08-project-management/BRD_TEMPLATE.md`
+**Guidelines:** `08-project-management/BRD_CREATION_GUIDELINES.md`
+
+**Required Sections:**
+- Document Control (version, approvals, change history)
+- Executive Summary (problem, solution, business value, success metrics)
+- Business Context (background, strategic alignment, constraints)
+- Stakeholder Analysis (RACI matrix)
+- Scope Definition (in-scope, out-of-scope, assumptions, dependencies)
+- Requirements Specification (functional + non-functional with acceptance criteria)
+- Geist Analysis (Ghost/Geyser/Gist)
+- Use Cases (personas, scenarios, user stories)
+- Traceability Matrix (requirements → business objectives → test cases)
+- Acceptance Criteria (measurable, testable)
+- Risk Assessment (technical, business, mitigation)
+
+**BRD Workflow:** Stakeholder interviews → Geist analysis → Requirements specification → Validation sessions → Formal approval → Implementation planning begins
+
+**BRD vs Implementation Plan:**
+- **BRD**: Business stakeholders, WHAT/WHY, before development
+- **Implementation Plan**: Developers/architects, HOW, after BRD approval
+
+### Implementation Plan Requirements
+
+**MANDATORY: Use template for plans >4 hours (created AFTER BRD approval)**
 
 **Templates:** `docs/MARKDOWN_PLAN_TEMPLATE.md` + guide
 
 **Required Metadata:** Plan Type, Author, Created, Updated, Version, Issue, Priority, Effort, Dependencies, <65k chars
 
 **MANDATORY Sections for ALL Plans:**
-- 📋 Overview with business context (WHY not just WHAT)
-- 🎯 Requirements & Acceptance Criteria (specific, measurable)
+- 📋 Overview with business context (WHY not just WHAT) - reference BRD
+- 🎯 Requirements & Acceptance Criteria (specific, measurable) - from BRD
 - 🧪 Test-Driven Development Approach (reference TDD_WORKFLOW_GUIDE.md)
 - 🏗️ Implementation Plan (phases with validation steps)
 - 📊 Quality Assurance & Validation (complete checklist)
@@ -206,7 +236,9 @@ Module C benefits from refactored patterns (faster implementation)
 
 **Locations:** `docs/plans/`, `dev-tools/scripts/investigation/`, `docs/adr/`, `dev-tools/test-results/`
 **Requirements:** 85%+ coverage, tests pass, server starts, no mocks, <65k chars
-**Process:** Read guide, copy template, fill metadata, define context + tests
+**Process:** Read BRD → Technical Geist analysis → Architecture design → TDD approach → Implementation plan → Review
+
+**Integration:** BRD → Implementation Plan → TDD → Validation → UAT → Production
 
 ## Geist-Driven Development Framework
 
