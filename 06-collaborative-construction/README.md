@@ -75,7 +75,8 @@ These guides draw from:
 - **PAIR_PROGRAMMING.md** - Effective pair programming techniques
 - **COLLABORATIVE_DEBUGGING.md** - Team debugging strategies
 - **WORKING_WITH_CODING_AGENTS.md** - Human-AI collaboration patterns
-- **AGENTIC_CODING_OPTIMIZATION.md** - Context window & time efficiency optimization for agentic workflows
+
+**Note:** Agentic coding guides have moved to **[07-agentic-coding/](../07-agentic-coding/)** for better organization
 
 ### Coming Soon
 
@@ -109,11 +110,8 @@ These guides draw from:
 - **TEAM_LEARNING.md** - Continuous learning practices
 
 **Agentic Coding (AI Collaboration):**
-- ✅ **WORKING_WITH_CODING_AGENTS.md** - Human-AI collaboration patterns
-- ✅ **AGENTIC_CODING_OPTIMIZATION.md** - Parallel execution, context window optimization, strategic refactoring
-- **PROMPT_ENGINEERING_FOR_CODE.md** - Effective prompting strategies
-- **AI_CODE_REVIEW.md** - Using AI for code review assistance
-- **AGENT_DELEGATION_PATTERNS.md** - When and how to delegate to specialized agents
+
+**Note:** All agentic coding content has moved to **[07-agentic-coding/](../07-agentic-coding/)** for comprehensive coverage of context management, LLM collaboration, and optimization strategies.
 
 ## Key Principles
 
@@ -145,12 +143,12 @@ These guides draw from:
 - **Fast feedback**: Failed builds notify immediately
 - **Never break the build**: Keep main branch always working
 
-### Agentic Coding Optimization
-- **Parallelize strategically**: Run independent tasks in parallel (analysis, verification, docs)
-- **Context budgeting**: Distribute context across specialized agents (<200K per turn)
-- **Strategic refactoring**: Refactor completed Module A while implementing Module B
-- **Checkpoint-based**: Refactor at milestones, not monolithically at the end
-- **Agent delegation**: Use specialized sub-agents for focused context (15-80K each)
+### Agentic Coding (See [07-agentic-coding/](../07-agentic-coding/))
+- **Context management**: Understand LLM context windows and fill gaps proactively
+- **Strategic parallelization**: Run independent tasks concurrently for time efficiency
+- **Context budgeting**: Distribute context across specialized agents
+- **Gap analysis**: Use Geist framework to identify and fill context gaps
+- **Human-AI collaboration**: Optimize human compute time by providing comprehensive context upfront
 
 ## Quick Start Checklist
 
@@ -182,12 +180,12 @@ For team standards:
 - [ ] Apply consistently across team
 - [ ] Update based on team retrospectives
 
-For agentic coding:
-- [ ] Identify parallelizable tasks (analysis, verification, docs)
-- [ ] Budget context across specialized agents
-- [ ] Use strategic refactoring at milestones
-- [ ] Delegate to sub-agents for focused tasks
-- [ ] Coordinate with meta-agent for 3+ sub-agents
+For agentic coding (see [07-agentic-coding/](../07-agentic-coding/)):
+- [ ] Provide comprehensive context upfront (Geist framework)
+- [ ] Fill Ghost/Geyser/Gist context gaps before implementation
+- [ ] Monitor for retrieval vs genuine context gaps
+- [ ] Limit clarifying questions to 5-10 max (human fatigue threshold)
+- [ ] Periodically refresh context every 50-75 turns
 
 ## Related Resources
 
@@ -196,6 +194,7 @@ For agentic coding:
 - **03-clean-architecture/**: Architectural review criteria
 - **04-quality-through-testing/**: Testing standards for reviews
 - **05-refactoring-and-improvement/**: Code smells to catch in reviews
+- **07-agentic-coding/**: Context management and human-AI collaboration patterns
 - **99-reference/**: Quick reference checklists
 
 ## Contributing
