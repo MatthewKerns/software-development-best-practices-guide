@@ -72,6 +72,202 @@ async def api_operation_tool(param1: str, param2: str) -> dict:
 - **Remove competing patterns** - only keep latest approach
 - **No backwards compatibility** - remove deprecated code immediately
 
+### Pre-emptive Duplication Detection (MANDATORY)
+
+**CRITICAL: Identify duplication risks BEFORE implementation to save implementation + refactoring work**
+
+When planning features, check for duplication during design - not after implementation. This prevents costly refactoring cycles.
+
+#### Real Example: Duplication from "Backward Compatibility" Without Users
+
+**What Happened:**
+- Implemented tool response with both `exit_code` and `return_code`
+- Both contained identical values (e.g., 0)
+- Added `return_code` for "backward compatibility" when **zero users existed**
+- Required refactoring to remove duplication
+
+**Cost:**
+- Implementation time: Added duplicate field
+- Refactoring time: Removed duplication
+- Test update time: Changed assertions
+- Documentation time: Updated docs twice
+
+**What Should Have Happened:**
+- Planning phase: Check utility function returns (`FeedbackFormatter.format_command_output()`)
+- Discovery: Already returns `exit_code`
+- Decision: Don't add `return_code`
+- Implementation: Use only `exit_code`
+- Result: Zero refactoring needed
+
+#### Pre-Implementation Duplication Checklist
+
+Before implementing any feature, verify:
+
+✅ **Field/Property Overlap**
+- [ ] Will this combine outputs from multiple utilities?
+- [ ] Have you READ each utility's actual return schema? (Don't assume - verify)
+- [ ] Are there fields with same/similar names or values?
+- [ ] Example: `FeedbackFormatter` returns `exit_code`, don't also add `return_code`
+
+✅ **Backward Compatibility Reality Check (Pre-Launch Projects)**
+- [ ] Is this codebase published? (npm, PyPI, GitHub release, production deployment)
+- [ ] Do external users exist who depend on current API?
+- [ ] **If NO to both → Don't add compatibility layers**
+- [ ] Rule: **"Best implementations should be only implementations"**
+- [ ] Context: **ZERO active users = ZERO backward compatibility needed**
+
+✅ **Utility Function Inspection**
+- [ ] Read the actual return value of utility functions BEFORE designing response schema
+- [ ] Print/log utility outputs during planning to verify fields
+- [ ] Don't duplicate what utilities already provide - extend only with new fields
+
+✅ **Naming Consistency**
+- [ ] Use consistent field names across entire codebase
+- [ ] Check existing tools/utilities for naming patterns
+- [ ] Example: Use `exit_code` everywhere, not `return_code` in some places and `exit_code` in others
+
+#### Planning Phase Integration
+
+**Phase 1: Design Review** (Before any code is written)
+1. List all response fields the feature will return
+2. Identify source of each field (utility output vs manual addition)
+3. Read actual utility return schemas (don't assume)
+4. Flag any field overlap or similar naming
+5. Verify no backward compatibility for unpublished code
+
+**Phase 2: Implementation Planning** (Creating task breakdown)
+1. Document which utilities provide which fields
+2. Verify no duplication between utility outputs and manual fields
+3. Challenge every "just in case" or "for compatibility" field
+
+**Phase 3: Pre-Commit Review** (Before committing code)
+1. Test actual response structure with real utility outputs
+2. Print response keys and verify no duplication
+3. Check for fields with identical or highly similar values
+
+#### Common Duplication Anti-Patterns
+
+**Anti-Pattern 1: "Just In Case" Fields**
+```python
+# ❌ WRONG - Adding fields "just in case"
+return {
+    "exit_code": 0,
+    "return_code": 0,      # "Just in case someone needs it"
+    "status_code": 0,      # "For compatibility"
+    "exitcode": 0          # "Alternative naming"
+}
+
+# ✅ CORRECT - Single, well-named field
+return {
+    "exit_code": 0         # Clear, consistent, DRY compliant
+}
+```
+
+**Anti-Pattern 2: Utility Wrap-and-Duplicate**
+```python
+# ❌ WRONG - Re-adding fields already in utility output
+formatted = FeedbackFormatter.format_command_output(cmd, stdout, stderr, exit_code)
+return {
+    **formatted,           # Contains exit_code
+    "return_code": exit_code  # Duplicates what's in formatted!
+}
+
+# ✅ CORRECT - Trust the utility, extend only with NEW fields
+formatted = FeedbackFormatter.format_command_output(cmd, stdout, stderr, exit_code)
+return {
+    **formatted,           # Use what it provides (exit_code included)
+    "execution_time": time.time() - start_time  # Add ONLY new fields
+}
+```
+
+**Anti-Pattern 3: Premature Deprecation (Pre-Launch)**
+```python
+# ❌ WRONG - Deprecating before anyone uses it
+return {
+    "exit_code": 0,
+    "return_code": 0       # "Deprecated, use exit_code"
+}
+# Problem: No users exist to deprecate for!
+
+# ✅ CORRECT - Best naming from day one
+return {
+    "exit_code": 0         # Best implementation is only implementation
+}
+```
+
+**Anti-Pattern 4: Backward Compatibility Without Users**
+```python
+# ❌ WRONG - Compatibility layer when zero users exist
+# Context: Unpublished codebase, no external dependencies
+return {
+    "new_field": value,
+    "old_field": value     # "Keep for backward compatibility"
+}
+
+# ✅ CORRECT - Direct replacement (no users to break)
+return {
+    "new_field": value     # Single source of truth
+}
+```
+
+#### Detection Tools & Techniques
+
+**During Planning:**
+```python
+# ALWAYS inspect utility outputs during design
+result = FeedbackFormatter.format_command_output(...)
+print("Utility returns:", list(result.keys()))
+# Use this to design your response schema without duplication
+```
+
+**During Implementation:**
+```python
+# Test response structure before committing
+response = await execute_tool(...)
+print("Response keys:", list(response.keys()))
+
+# Check for value duplication
+from collections import defaultdict
+value_to_keys = defaultdict(list)
+for key, value in response.items():
+    value_to_keys[value].append(key)
+
+for value, keys in value_to_keys.items():
+    if len(keys) > 1:
+        print(f"WARNING: {keys} all have value {value}")
+```
+
+**Before Commit:**
+```python
+# In tests, verify no duplicate values across fields
+def test_no_duplicate_fields():
+    response = tool.execute()
+    value_counts = {}
+    for key, value in response.items():
+        if value in value_counts:
+            pytest.fail(f"Duplicate value {value}: {key} and {value_counts[value]}")
+        value_counts[value] = key
+```
+
+#### Success Metrics
+
+**Planning Phase:**
+- ✅ Schema review completed before any code written
+- ✅ All utility return values documented
+- ✅ Zero field overlap identified in design
+
+**Implementation Phase:**
+- ✅ Response structure tested before commit
+- ✅ No fields with duplicate values
+- ✅ Consistent naming across all tools
+
+**Post-Implementation:**
+- ✅ Zero refactoring needed to remove duplication
+- ✅ No "backward compatibility" for unpublished code
+- ✅ Documentation accurate (no deprecated fields)
+
+**See Also:** DRY Compliance (line 67), Geist Analysis for detecting Ghost (hidden duplication), codebase-analyzer sub-agent for DRY compliance checks
+
 ## Development Practices
 
 ### TDD Approach
