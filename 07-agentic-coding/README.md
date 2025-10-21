@@ -36,11 +36,12 @@ Practical techniques for providing the right information efficiently.
 - **[Efficient Context Transfer](context-filling-strategies/EFFICIENT_CONTEXT_TRANSFER.md)** - Best practices for filling context
 - **[Clarifying Questions Protocol](context-filling-strategies/CLARIFYING_QUESTIONS_PROTOCOL.md)** - Asking and answering questions effectively (human limit: 5-10 questions before disengagement)
 - **[Context Prioritization](context-filling-strategies/CONTEXT_PRIORITIZATION.md)** - What to fill first, what can wait
+- **[Geist Gap Analysis Framework](context-filling-strategies/GEIST_GAP_ANALYSIS_FRAMEWORK.md)** - Systematic three-dimensional context gap analysis (Ghost/Geyser/Gist)
 
 ### 3. Optimization & Collaboration
 Advanced patterns for maximizing effectiveness of human-AI collaboration.
 
-- **[Context Window Optimization](optimization/CONTEXT_WINDOW_OPTIMIZATION.md)** - Managing context budgets (links to `../06-collaborative-construction/AGENTIC_CODING_OPTIMIZATION.md`)
+- **[Context Window Optimization](optimization/CONTEXT_WINDOW_OPTIMIZATION.md)** - Managing context budgets (comprehensive guide at [AGENTIC_CODING_OPTIMIZATION.md](optimization/AGENTIC_CODING_OPTIMIZATION.md))
 - **[Parallel Execution Patterns](optimization/PARALLEL_EXECUTION_PATTERNS.md)** - Strategic parallelization for time efficiency
 - **[Human Compute Time Optimization](optimization/HUMAN_COMPUTE_TIME_OPTIMIZATION.md)** - Where humans add the most value
 
@@ -183,4 +184,4 @@ This guide informs the agentic coding patterns documented in `CLAUDE.md`:
 
 **Version:** 1.0.0
 **Last Updated:** 2025-10-21
-**Status:** Active (Core structure + optimization guide complete, detailed guides in progress)
+**Status:** Complete - All 15 guides delivered with comprehensive coverage (14 planned + 1 bonus Geist framework guide)
