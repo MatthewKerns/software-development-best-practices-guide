@@ -123,6 +123,15 @@ software-development-best-practices-guide/
 │   ├── CODE_REVIEW_CHECKLIST.md       ✅ Code review checklist
 │   └── TDD_QUICK_REFERENCE.md         ✅ TDD quick reference
 │
+├── skills/ ✨ NEW                     # Claude Skills for AI-assisted development
+│   ├── parallel-execution-planner/    ✨ Optimize parallel vs sequential execution
+│   ├── geist-analyzer/                ✨ Ghost-Geyser-Gist complex problem analysis
+│   ├── gap-analyzer/                  ✨ Continuous gap analysis (vision → implementation)
+│   ├── tdd-workflow-assistant/        ✨ Red-Green-Refactor TDD guidance
+│   ├── dry-compliance-checker/        ✨ Pre-emptive duplication detection
+│   ├── code-smell-detector/           ✨ Identify refactoring opportunities
+│   └── solid-validator/               ✨ SOLID principles validation
+│
 ├── docs/                              # Additional documentation
 │   └── CHROME_DEVTOOLS_MCP_GUIDE.md  ✅ Chrome DevTools MCP integration
 │
@@ -348,6 +357,58 @@ Condensed checklists and quick references for daily use. Perfect for keeping ope
 
 ---
 
+### skills/ ✨ **NEW** - Claude Skills for AI-Assisted Development
+
+**Model-invoked capabilities for Claude Code**
+
+Claude Skills are modular, automatically-invoked capabilities that extend Claude's functionality. Unlike slash commands (user-invoked), Skills are model-invoked—Claude automatically decides when to use them based on your request.
+
+**All 7 Skills Available**:
+- ✨ **[parallel-execution-planner](skills/parallel-execution-planner/)** - Analyze tasks for optimal parallel vs sequential execution (30-50% time savings)
+- ✨ **[geist-analyzer](skills/geist-analyzer/)** - Ghost-Geyser-Gist framework for complex problem investigation
+- ✨ **[gap-analyzer](skills/gap-analyzer/)** - Continuous gap analysis from vision to implementation
+- ✨ **[tdd-workflow-assistant](skills/tdd-workflow-assistant/)** - Red-Green-Refactor TDD guidance and automation
+- ✨ **[dry-compliance-checker](skills/dry-compliance-checker/)** - Pre-emptive duplication detection (save 2-8 hours per feature)
+- ✨ **[code-smell-detector](skills/code-smell-detector/)** - Identify refactoring opportunities with specific patterns
+- ✨ **[solid-validator](skills/solid-validator/)** - SOLID principles validation and violation detection
+
+**How to Use Skills**:
+
+Skills are available in two locations:
+
+1. **Personal Skills** (all projects): `~/.claude/skills/`
+   ```bash
+   # Copy skills to your global Claude directory
+   cp -r skills/* ~/.claude/skills/
+   ```
+
+2. **Project Skills** (this project only): `.claude/skills/`
+   ```bash
+   # Already available in this repo
+   # Claude Code automatically discovers them
+   ```
+
+**When Claude Uses Skills**:
+
+Claude automatically invokes skills when relevant to your request:
+
+- **"Should I implement frontend and backend in parallel?"** → `parallel-execution-planner`
+- **"Why does this feature feel incomplete?"** → `gap-analyzer` + `geist-analyzer`
+- **"Guide me through TDD for this feature"** → `tdd-workflow-assistant`
+- **"Check if authentication logic already exists"** → `dry-compliance-checker`
+- **"What's wrong with this code?"** → `code-smell-detector` + `solid-validator`
+
+**Benefits**:
+
+- 🚀 **Time Savings**: 30-90% reduction on parallelizable work
+- 🔍 **Pre-emptive Detection**: Catch duplication/smells before implementation
+- 📚 **Best Practices**: Automated guidance from comprehensive guides
+- 🤖 **AI-Native**: Designed for Claude Code's autonomous decision-making
+
+**Learn More**: See [Claude Skills Documentation](https://docs.claude.com/en/docs/claude-code/skills)
+
+---
+
 ## 💡 How to Use This Repository
 
 ### Daily Coding
@@ -501,7 +562,50 @@ git clone --recursive <your-repository-url>
 git submodule update --init --recursive
 ```
 
-### Method 2: Direct Clone
+### Method 2: Direct Clone with Auto-Update Hook (Recommended for Active Development)
+
+For projects where you want automatic updates before every commit:
+
+```bash
+# Clone to workspace directory (sibling to your project)
+cd ~/workspace
+git clone https://github.com/MatthewKerns/software-development-best-practices-guide.git
+
+# In your project, install husky
+cd your-project
+npm install --save-dev husky
+
+# Initialize husky
+npx husky init
+
+# Add pre-commit hook to auto-sync best practices guide
+cat > .husky/pre-commit << 'EOF'
+# Sync best practices guide before commit
+cd ../software-development-best-practices-guide && git pull origin main --quiet || echo "⚠️  Could not update best practices guide"
+
+# Run tests
+npm test
+EOF
+
+# Make hook executable
+chmod +x .husky/pre-commit
+
+# Add manual sync script to package.json
+npm pkg set scripts.sync:best-practices="cd ../software-development-best-practices-guide && git pull origin main && git log -1 --oneline"
+```
+
+**Benefits**:
+- ✅ Automatically pulls latest best practices before every commit
+- ✅ Team-wide enforcement (husky hooks are version-controlled)
+- ✅ Manual sync available: `npm run sync:best-practices`
+- ✅ Non-blocking (shows warning if guide repo unavailable)
+
+**Manual sync anytime:**
+```bash
+npm run sync:best-practices
+```
+
+### Method 3: Direct Clone (Simple)
 
 For one-time reference or non-git projects:
 
@@ -513,7 +617,7 @@ git clone https://github.com/MatthewKerns/software-development-best-practices-gu
 cd docs/best-practices && git pull origin main
 ```
 
-### Method 3: NPM Package (Node.js Projects)
+### Method 4: NPM Package (Node.js Projects)
 
 ```bash
 npm install --save-dev github:MatthewKerns/software-development-best-practices-guide
@@ -528,7 +632,7 @@ Then reference in package.json:
 }
 ```
 
-### Method 4: Download Release Archive
+### Method 5: Download Release Archive
 
 Download the latest release as ZIP from [Releases](https://github.com/MatthewKerns/software-development-best-practices-guide/releases) and extract to `docs/best-practices`.
 
