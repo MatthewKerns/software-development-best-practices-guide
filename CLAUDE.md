@@ -48,6 +48,40 @@ claude mcp remove chrome-devtools
 
 **Documentation**: See `docs/CHROME_DEVTOOLS_MCP_GUIDE.md` for complete guide
 
+### Claude Skills Integration
+
+**Status**: ✅ 7 Skills Available
+
+Claude Skills are model-invoked capabilities that extend Claude's autonomous decision-making with specialized expertise from this repository's best practices.
+
+**Available Skills:**
+- `parallel-execution-planner`: Optimize parallel vs sequential execution (30-50% time savings)
+- `geist-analyzer`: Ghost-Geyser-Gist three-dimensional problem analysis
+- `gap-analyzer`: Continuous gap detection from vision to implementation
+- `tdd-workflow-assistant`: Red-Green-Refactor TDD guidance and automation
+- `dry-compliance-checker`: Pre-emptive duplication detection (save 2-8 hours/feature)
+- `code-smell-detector`: Identify refactoring opportunities with specific patterns
+- `solid-validator`: SOLID principles validation and violation detection
+
+**How Skills Work:**
+- Model-invoked (automatic) vs slash commands (user-invoked)
+- Claude automatically uses skills when relevant to your request
+- Skills apply best practices from repository documentation
+- Located in `skills/` directory
+
+**When Claude Uses Skills:**
+- "Should I parallelize this work?" → `parallel-execution-planner`
+- "Why does this feel incomplete?" → `gap-analyzer` + `geist-analyzer`
+- "Guide me through TDD" → `tdd-workflow-assistant`
+- "Does this exist already?" → `dry-compliance-checker`
+- "What's wrong with this code?" → `code-smell-detector` + `solid-validator`
+
+**Setup:**
+```bash
+# Skills auto-discovered from project .claude/skills/ or global ~/.claude/skills/
+# No additional setup required - already integrated in this repository
+```
+
 ## Architecture Patterns
 
 ### LangGraph Tool Pattern (MANDATORY)
@@ -71,6 +105,8 @@ async def api_operation_tool(param1: str, param2: str) -> dict:
 - **Delete old implementations** when refactoring
 - **Remove competing patterns** - only keep latest approach
 - **No backwards compatibility** - remove deprecated code immediately
+
+**Skill Integration**: Use `dry-compliance-checker` skill for pre-emptive duplication detection before implementation
 
 ### Pre-emptive Duplication Detection (MANDATORY)
 
@@ -266,7 +302,7 @@ def test_no_duplicate_fields():
 - ✅ No "backward compatibility" for unpublished code
 - ✅ Documentation accurate (no deprecated fields)
 
-**See Also:** DRY Compliance (line 67), Geist Analysis for detecting Ghost (hidden duplication), codebase-analyzer sub-agent for DRY compliance checks
+**See Also:** DRY Compliance (line 99), Geist Analysis for detecting Ghost (hidden duplication), codebase-analyzer sub-agent for DRY compliance checks, `dry-compliance-checker` skill for automated pre-implementation duplication analysis
 
 ## Development Practices
 
@@ -276,12 +312,15 @@ def test_no_duplicate_fields():
 - **Test-Driven Gap Resolution**: When tests uncover implementation gaps, document them systematically and create comprehensive resolution plans (see `docs/quality-through-testing/TEST_DRIVEN_GAP_RESOLUTION.md`)
 - **Direct debugging**: Debug statements in production code for quick validation
 
+**Skill Integration**: Use `tdd-workflow-assistant` skill for automated Red-Green-Refactor guidance, test planning, and TDD workflow optimization
+
 **Gap Resolution Protocol (MANDATORY when tests reveal issues):**
 1. Document discovered gaps with GAP-[ID] format in `docs/decision-history/gaps/`
 2. Categorize by severity (Critical/High/Medium/Low)
 3. Create gap resolution plan following template
 4. Use TDD loop (RED-GREEN-REFACTOR) to close each gap
 5. Validate all gaps resolved before proceeding
+6. Leverage `gap-analyzer` skill for systematic gap enumeration and tracking
 
 ### Async Compliance
 All LangGraph workflows must be fully async:
@@ -306,6 +345,8 @@ All LangGraph workflows must be fully async:
 - Type hints everywhere
 - Black formatting (88 chars)
 - Docstrings with business context
+
+**Skill Integration**: Use `code-smell-detector` skill for identifying refactoring opportunities and `solid-validator` skill for SOLID principles validation
 
 **Test markers:** `@pytest.mark.unit` (mocked deps), `@pytest.mark.integration` (real deps), `@pytest.mark.node` (LangGraph), `@pytest.mark.live` (external)
 
@@ -348,6 +389,8 @@ Tool Pattern (`docs/adr/ADR_005_*`), TDD (`code_quality_practices/TDD_*`), Async
 **MANDATORY: Optimize for both time efficiency and context window usage in all agentic workflows**
 
 **Complete Guide:** `06-collaborative-construction/AGENTIC_CODING_OPTIMIZATION.md`
+
+**Skill Integration**: Use `parallel-execution-planner` skill for automated parallel vs sequential task analysis (30-50% time savings)
 
 ### Quick Reference
 
@@ -440,6 +483,8 @@ Module C benefits from refactored patterns (faster implementation)
 
 **MANDATORY: Use this philosophical framework for all implementation, debugging, and problem analysis**
 
+**Skill Integration**: Use `geist-analyzer` skill for automated Ghost-Geyser-Gist three-dimensional problem analysis
+
 ### Three-Dimensional Problem Analysis
 
 **1. Ghost Analysis (Parallel Reality)**
@@ -462,6 +507,7 @@ Module C benefits from refactored patterns (faster implementation)
 ### Implementation Requirements
 - Document Ghost findings, plan for Geyser forces, preserve Gist essence
 - Use framework for tasks, debugging, and architecture
+- Leverage `geist-analyzer` skill for automated three-dimensional analysis
 
 **Reference**: Applies Kant's phenomena/noumena and Hegel's dialectical spirit for deeper understanding.
 
@@ -1066,6 +1112,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## Feature Gap Resolution Workflow
 
 **MANDATORY: Use automated feature gap resolution for incomplete implementations requiring iterative development**
+
+**Skill Integration**: Use `gap-analyzer` skill for continuous gap detection from vision to implementation, and `geist-analyzer` skill for convergence validation
 
 ### Automated Feature Completion Architecture
 
