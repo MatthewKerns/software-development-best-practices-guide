@@ -373,7 +373,7 @@ find . -name "*.py" -exec basename {} \; | sort | uniq -d  # Duplication
 
 ## Key References
 
-Tool Pattern (`docs/adr/ADR_005_*`), TDD (`code_quality_practices/TDD_*`), Async (`construction_best_practices/ASYNC_*`), Integration (`construction_best_practices/INTEGRATION_*`), **DB Migrations** (`docs/DATABASE_MIGRATION_GUIDE.md`)
+Tool Pattern (`docs/adr/ADR_005_*`), TDD (`code_quality_practices/TDD_*`), Async (`construction_best_practices/ASYNC_*`), Integration (`construction_best_practices/INTEGRATION_*`), **DB Migrations** (`docs/DATABASE_MIGRATION_GUIDE.md`), **Production Readiness** (`09-production-readiness/` - 8-area validation framework)
 
 ## Common Patterns
 
@@ -525,6 +525,93 @@ Module C benefits from refactored patterns (faster implementation)
 
 **Failure Protocol:** Document gaps → remediation → fix → re-run → do NOT mark complete until ALL pass
 
+## Production Readiness Validation
+
+**MANDATORY: All production deployments must pass production readiness validation**
+
+**Framework:** `09-production-readiness/` - Comprehensive 8-area production validation framework
+
+**8-Area Assessment:**
+1. **Infrastructure Resilience**: Auto-scaling, failover, backups, disaster recovery
+2. **Security Posture**: Auth/authz, secrets management, vulnerability scanning
+3. **Performance & Scalability**: Database optimization, caching, load capacity
+4. **Monitoring & Observability**: Logging, alerting, metrics, error tracking
+5. **Deployment & Release**: CI/CD, rollback strategy, feature flags
+6. **Data Integrity**: Backups, migrations, validation, consistency
+7. **Cost Optimization**: Resource right-sizing, waste elimination
+8. **Compliance Readiness**: GDPR, SOC2, HIPAA, audit logging
+
+**Complexity-Based Guides:**
+- **Small Scale** (<10K visitors, static sites): `09-production-readiness/SMALL_SCALE_READINESS.md` (4-8 hours)
+- **Medium Scale** (10K-100K users, dynamic apps): `09-production-readiness/MEDIUM_SCALE_READINESS.md` (2-3 weeks)
+- **Large Scale** (100K+ users, multi-repo): `09-production-readiness/LARGE_SCALE_READINESS.md` (1-2 months)
+
+**Operational Guides:**
+- **Framework**: `09-production-readiness/PRODUCTION_READINESS_FRAMEWORK.md` - 8-area checklist with scoring
+- **Deployment**: `09-production-readiness/PRODUCTION_DEPLOYMENT_CHECKLIST.md` - Pre-deployment validation
+- **Recovery**: `09-production-readiness/ROLLBACK_AND_RECOVERY.md` - Disaster recovery procedures
+- **Monitoring**: `09-production-readiness/MONITORING_AND_OBSERVABILITY.md` - Observability setup
+- **Security**: `09-production-readiness/SECURITY_HARDENING.md` - Security hardening checklist
+- **Performance**: `09-production-readiness/PERFORMANCE_BENCHMARKS.md` - Performance standards
+- **Cost**: `09-production-readiness/COST_OPTIMIZATION.md` - Cost management
+- **Compliance**: `09-production-readiness/COMPLIANCE_READINESS.md` - Regulatory standards
+
+**Production Validation Workflow:**
+```
+Pre-Production Assessment (1-2 weeks before):
+• requirements-analyzer → Extract production requirements
+• geist-analyzer → Ghost/Geyser/Gist analysis for production scenarios
+• 8-Area Assessment → Complete PRODUCTION_READINESS_FRAMEWORK.md
+• gap-analyzer → Track remediation progress
+
+Pre-Deployment Validation (1-3 days before):
+• Complete PRODUCTION_DEPLOYMENT_CHECKLIST.md
+• Test rollback procedures (ROLLBACK_AND_RECOVERY.md)
+• Configure monitoring (MONITORING_AND_OBSERVABILITY.md)
+• exactly-right → Comprehensive audit
+
+Deployment & Post-Launch:
+• Controlled deployment with real-time monitoring
+• Critical path validation in production
+• 24/7 monitoring for first 48-72 hours
+```
+
+**Coordination Meta-Agent for Production (MANDATORY):**
+```
+coordination-meta-agent
+↓
+Parallel Verification Phase:
+• security-validator → SECURITY_HARDENING.md checks
+• performance-validator → PERFORMANCE_BENCHMARKS.md validation
+• gap-analyzer → Missing production requirements
+• exactly-right → Zero-defect validation
+↓
+Sequential Release Phase:
+• database-migrator → Schema changes with rollback
+• deployment-orchestrator → Blue-green or canary deployment
+• monitoring-validator → Observability stack operational
+↓
+Production Validation Phase (Parallel):
+• exactly-right → Critical paths validation
+• ui-bar-raiser → User flows functional
+• performance-validator → Benchmarks met
+↓
+PRODUCTION READY or ROLLBACK
+```
+
+**Success Criteria (ALL must be met):**
+- ✅ All 8 production readiness areas validated
+- ✅ Critical path test coverage ≥85%
+- ✅ Security scan: Zero critical/high vulnerabilities
+- ✅ Performance benchmarks met
+- ✅ Monitoring and alerting configured
+- ✅ Rollback procedures tested
+- ✅ Disaster recovery plan validated
+- ✅ Team trained on incident response
+- ✅ Stakeholder approval obtained
+
+**Reference:** See `09-production-readiness/README.md` for complete production readiness workflow
+
 ## Coordination Meta-Agent Architecture
 
 **MANDATORY: Use coordination meta-agent for complex implementations (3+ sub-agents)**
@@ -541,7 +628,7 @@ Central orchestrator managing parallel execution, conflict resolution, and quali
 **Use For:**
 - Complex implementations (3+ sub-agents)
 - Cross-cutting concerns (security, performance, testing)
-- Production deployments
+- **Production deployments** (see `09-production-readiness/` for 8-area validation framework)
 - Large refactoring efforts
 - Multi-service integrations
 
@@ -657,7 +744,7 @@ Gap + Docs + Performance + Traceability (Parallel)
 - Incomplete implementations → **Feature Gap Resolution Workflow** (`geist-analyzer` + `gap-analyzer` + `tdd-implementor` + `ui-bar-raiser`)
 - Missing requirements → Start with `geist-analyzer` gap detection mode
 - Iterative development → Loop until Gist confirms feature complete
-- **Production readiness validation** → **Coordinated Validation** (`exactly-right` + `requirements-analyzer` + `gap-analyzer` in parallel)
+- **Production readiness validation** → **Coordinated Validation** (`exactly-right` + `requirements-analyzer` + `gap-analyzer` in parallel) + **8-Area Assessment** (see `09-production-readiness/PRODUCTION_READINESS_FRAMEWORK.md`)
 
 **Code Quality Focus:**
 - Verbose/complex code → `code-conciser` (after implementation)
@@ -1376,7 +1463,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 - **Draft:** `draft: [analysis-type] for [feature]` (planning phase)
 - **Feature:** `feat: implement [feature] with [capability]` + security/testing details
 - **Quality:** `quality: [feature] passes all quality gates` + metrics
-- **Release:** `release: complete [feature] with full traceability` + production-ready status
+- **Release:** `release: complete [feature] with full traceability` + production-ready status (see `09-production-readiness/` for validation checklist)
 
 **Failure Recovery:** Analyze → Fix → Re-validate → Retry → Escalate
 
@@ -1401,6 +1488,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 - Ignore Ghost/Geyser/Gist dimensions
 - **CRITICAL: Leave old implementations - ALWAYS remove deprecated code**
 - **CRITICAL: Complex implementations (3+ sub-agents) without coordination meta-agent**
-- **CRITICAL: Skip coordination meta-agent for production deployments**
+- **CRITICAL: Skip coordination meta-agent for production deployments** (see `09-production-readiness/` for validation framework)
+- **CRITICAL: Deploy to production without completing 8-area production readiness assessment**
 
 Remember: Direct debugging over tests. Check existing functionality first.

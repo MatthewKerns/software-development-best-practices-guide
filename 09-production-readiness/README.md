@@ -127,7 +127,7 @@ Use the three-dimensional Geist analysis for production readiness:
 - What constitutes "production-ready" for this specific application?
 - What's the minimum viable production readiness vs nice-to-haves?
 
-**Reference:** `07-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md`
+**Reference:** `10-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md`
 
 ### Coordination Meta-Agent for Production Deployments
 
@@ -323,7 +323,7 @@ Apply DRY principles to production infrastructure:
 
 ### Related Guides
 - **06-collaborative-construction/INTEGRATION_PLAYBOOK_GUIDE.md** - Integration testing patterns
-- **07-geist-gap-analysis-framework/** - Gap analysis methodology
+- **10-geist-gap-analysis-framework/** - Gap analysis methodology
 - **08-project-management/BRD_TEMPLATE.md** - Business requirements for production features
 
 ### Tool Integration

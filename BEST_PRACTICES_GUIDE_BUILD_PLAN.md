@@ -120,7 +120,7 @@ best-practices-guide/
 │   ├── PAIR_PROGRAMMING.md         # Code Complete 2 Ch 21
 │   └── INTEGRATION_PLAYBOOK.md     # Current guide - moved here
 │
-├── 07-geist-gap-analysis-framework/ # Current philosophical framework
+├── 10-geist-gap-analysis-framework/ # Current philosophical framework
 │   ├── README.md
 │   ├── GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md  # Current
 │   ├── GEIST_COPILOT_INSTRUCTIONS.md            # Current
@@ -486,7 +486,7 @@ best-practices-guide/
 
 | Current Location | New Location | Changes |
 |------------------|--------------|---------|
-| `02-architecture-design/GEIST_*` | `07-geist-gap-analysis-framework/` | None |
+| `02-architecture-design/GEIST_*` | `10-geist-gap-analysis-framework/` | None |
 | `03-development-workflow/INTEGRATION_*` | `06-collaborative-construction/` | None |
 | `04-quality-assurance/COVERAGE_*` | `04-quality-through-testing/` | Enhance with Code Complete |
 | `05-specialized-guides/PROJECT_*` | `08-project-management/` | None |

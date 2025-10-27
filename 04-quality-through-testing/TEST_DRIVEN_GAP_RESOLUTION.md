@@ -712,4 +712,4 @@ The key is treating gap resolution as a first-class workflow, not an afterthough
 - [Coverage Standards](./COVERAGE_STANDARDS.md)
 - [Working with Coding Agents](../06-collaborative-construction/WORKING_WITH_CODING_AGENTS.md)
 - [Feature Gap Resolution Workflow (CLAUDE.md)](../CLAUDE.md)
-- [Geist Gap Analysis Framework](../07-geist-gap-analysis-framework/CONTINUOUS_GAP_ANALYSIS.md)
+- [Geist Gap Analysis Framework](../10-geist-gap-analysis-framework/CONTINUOUS_GAP_ANALYSIS.md)

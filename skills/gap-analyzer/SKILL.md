@@ -474,8 +474,8 @@ Recommended Ship Date: [Date]
 
 ## References
 
-- **[CONTINUOUS_GAP_ANALYSIS.md](../07-geist-gap-analysis-framework/CONTINUOUS_GAP_ANALYSIS.md)** - Detailed framework
-- **[GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md](../07-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md)** - Investigation techniques
+- **[CONTINUOUS_GAP_ANALYSIS.md](../../10-geist-gap-analysis-framework/CONTINUOUS_GAP_ANALYSIS.md)** - Detailed framework
+- **[GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md](../../10-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md)** - Investigation techniques
 
 ## Success Metrics
 

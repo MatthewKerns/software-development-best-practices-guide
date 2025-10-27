@@ -237,7 +237,7 @@ Total across all guides: **300+ code examples**
 - **01-foundations/FUNCTIONS_AND_ROUTINES.md**: Function-level design
 - **03-clean-architecture/SOLID_PRINCIPLES.md**: Architectural principles
 - **04-quality-through-testing/**: Testing well-designed classes
-- **07-geist-gap-analysis-framework/**: Philosophical foundation for design decisions
+- **10-geist-gap-analysis-framework/**: Philosophical foundation for design decisions
 
 ## Contributing
 

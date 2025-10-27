@@ -98,7 +98,7 @@ software-development-best-practices-guide/
 │   ├── INTEGRATION_PLAYBOOK_GUIDE.md  ✅ 11-step integration process
 │   └── INTEGRATION_PLAYBOOK_QUICK_REFERENCE.md  ✅ Quick reference
 │
-├── 07-geist-gap-analysis-framework/ ✅             # Advanced gap analysis - COMPLETE
+├── 10-geist-gap-analysis-framework/ ✅             # Advanced gap analysis - COMPLETE
 │   ├── README.md                      ✅ Framework overview
 │   ├── GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md  ✅ Core framework
 │   ├── GEIST_COPILOT_INSTRUCTIONS.md  ✅ AI agent instructions
@@ -179,7 +179,7 @@ Jump to areas where you need improvement:
 - **Testing Gaps?** → [04-quality-through-testing/](04-quality-through-testing/) - 6 testing guides
 - **Refactoring Legacy Code?** → [05-refactoring-and-improvement/](05-refactoring-and-improvement/) - 4 refactoring guides
 - **Team Collaboration?** → [06-collaborative-construction/](06-collaborative-construction/) - 5 team practice guides
-- **Mysterious Bugs or Incomplete Features?** → [07-geist-gap-analysis-framework/](07-geist-gap-analysis-framework/) - Advanced gap analysis
+- **Mysterious Bugs or Incomplete Features?** → [10-geist-gap-analysis-framework/](10-geist-gap-analysis-framework/) - Advanced gap analysis
 
 ### Quick Reference Checklists
 
@@ -295,7 +295,7 @@ Collaborative development practices including code reviews, pair programming, an
 
 ---
 
-### 07-geist-gap-analysis-framework/ ⚠️ **SPECIALIZED - ADVANCED USE ONLY**
+### 10-geist-gap-analysis-framework/ ⚠️ **SPECIALIZED - ADVANCED USE ONLY**
 
 **Three-dimensional problem analysis framework**
 
@@ -310,11 +310,11 @@ A philosophical framework for deep problem investigation using Ghost (parallel r
 **Do NOT use for**: Basic coding, simple functions, straightforward features, everyday development
 
 **Available Guides** (3/3 core guides complete):
-- ✅ [GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md](07-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md) - Core three-dimensional framework
-- ✅ [GEIST_COPILOT_INSTRUCTIONS.md](07-geist-gap-analysis-framework/GEIST_COPILOT_INSTRUCTIONS.md) - AI agent integration
-- ✅ [DESIGN_INVESTIGATION_GUIDANCE.md](07-geist-gap-analysis-framework/DESIGN_INVESTIGATION_GUIDANCE.md) - Implementation guidance
+- ✅ [GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md](10-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md) - Core three-dimensional framework
+- ✅ [GEIST_COPILOT_INSTRUCTIONS.md](10-geist-gap-analysis-framework/GEIST_COPILOT_INSTRUCTIONS.md) - AI agent integration
+- ✅ [DESIGN_INVESTIGATION_GUIDANCE.md](10-geist-gap-analysis-framework/DESIGN_INVESTIGATION_GUIDANCE.md) - Implementation guidance
 
-📖 [View Directory README](07-geist-gap-analysis-framework/README.md)
+📖 [View Directory README](10-geist-gap-analysis-framework/README.md)
 
 ---
 

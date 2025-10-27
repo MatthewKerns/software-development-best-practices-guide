@@ -474,9 +474,9 @@ Actions Taken:
 
 ## References
 
-- **[GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md](../07-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md)** - Complete framework
-- **[CONTINUOUS_GAP_ANALYSIS.md](../07-geist-gap-analysis-framework/CONTINUOUS_GAP_ANALYSIS.md)** - Gap analysis workflow
-- **[GEIST_COPILOT_INSTRUCTIONS.md](../07-geist-gap-analysis-framework/GEIST_COPILOT_INSTRUCTIONS.md)** - AI assistant usage
+- **[GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md](../../10-geist-gap-analysis-framework/GEIST_DESIGN_INVESTIGATION_FRAMEWORK.md)** - Complete framework
+- **[CONTINUOUS_GAP_ANALYSIS.md](../../10-geist-gap-analysis-framework/CONTINUOUS_GAP_ANALYSIS.md)** - Gap analysis workflow
+- **[GEIST_COPILOT_INSTRUCTIONS.md](../../10-geist-gap-analysis-framework/GEIST_COPILOT_INSTRUCTIONS.md)** - AI assistant usage
 
 ## Success Metrics
 

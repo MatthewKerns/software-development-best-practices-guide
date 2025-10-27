@@ -32,10 +32,15 @@
     "04-quality-through-testing/**/*.md",
     "05-refactoring-and-improvement/**/*.md",
     "06-collaborative-construction/**/*.md",
-    "07-geist-gap-analysis-framework/**/*.md",
+    "07-agentic-coding/**/*.md",
     "08-project-management/**/*.md",
+    "09-production-readiness/**/*.md",
+    "10-geist-gap-analysis-framework/**/*.md",
     "99-reference/**/*.md",
+    "skills/**/*.md",
+    "docs/**/*.md",
     "README.md",
+    "CLAUDE.md",
     "LICENSE"
   ]
 }
