@@ -60,7 +60,7 @@ Provides visibility into production behavior and enables rapid issue detection.
 
 Enables safe, repeatable, and reversible deployments.
 
-📄 [ROLLBACK_AND_RECOVERY.md](ROLLBACK_AND_RECOVERY.md) | [PRODUCTION_READINESS_FRAMEWORK.md - Deployment Section](PRODUCTION_READINESS_FRAMEWORK.md#5-deployment--release)
+📄 [ROLLBACK_AND_RECOVERY.md](ROLLBACK_AND_RECOVERY.md) | [RAILWAY_DEPLOYMENT_BEST_PRACTICES.md](RAILWAY_DEPLOYMENT_BEST_PRACTICES.md) | [PRODUCTION_READINESS_FRAMEWORK.md - Deployment Section](PRODUCTION_READINESS_FRAMEWORK.md#5-deployment--release)
 
 ### 6. Data Integrity
 **Focus:** Backups, migrations, validation, consistency, recovery testing
@@ -92,6 +92,7 @@ Meets regulatory requirements and industry standards.
 - **[PRODUCTION_DEPLOYMENT_CHECKLIST.md](PRODUCTION_DEPLOYMENT_CHECKLIST.md)** - Step-by-step deployment validation checklist
 - **[ROLLBACK_AND_RECOVERY.md](ROLLBACK_AND_RECOVERY.md)** - Disaster recovery and rollback procedures
 - **[MONITORING_AND_OBSERVABILITY.md](MONITORING_AND_OBSERVABILITY.md)** - Monitoring setup and alerting configuration
+- **[RAILWAY_DEPLOYMENT_BEST_PRACTICES.md](RAILWAY_DEPLOYMENT_BEST_PRACTICES.md)** - Comprehensive Railway deployment guide (distilled from 159 commits)
 
 ### Domain-Specific Guides
 - **[SECURITY_HARDENING.md](SECURITY_HARDENING.md)** - Security best practices and hardening checklist
