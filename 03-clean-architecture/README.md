@@ -68,27 +68,31 @@ These guides are primarily informed by:
 
 ## Guides in This Directory
 
-### Coming Soon
+### Comprehensive Guides (Available Now)
 
-**SOLID Principles:**
-- **SINGLE_RESPONSIBILITY_PRINCIPLE.md** - One reason to change
-- **OPEN_CLOSED_PRINCIPLE.md** - Open for extension, closed for modification
-- **LISKOV_SUBSTITUTION_PRINCIPLE.md** - Substitutability of derived types
-- **INTERFACE_SEGREGATION_PRINCIPLE.md** - Client-specific interfaces
-- **DEPENDENCY_INVERSION_PRINCIPLE.md** - Depend on abstractions
-
-**Component Principles:**
-- **COMPONENT_COHESION.md** - REP, CCP, CRP principles
-- **COMPONENT_COUPLING.md** - ADP, SDP, SAP principles
-- **ARCHITECTURAL_BOUNDARIES.md** - Creating and maintaining boundaries
-- **DEPENDENCY_MANAGEMENT.md** - Managing dependencies between components
-- **PLUGIN_ARCHITECTURE.md** - Creating flexible, extensible systems
+**Foundational Principles:**
+- **[SOLID_PRINCIPLES.md](SOLID_PRINCIPLES.md)** - Complete guide to all 5 SOLID principles (SRP, OCP, LSP, ISP, DIP)
+- **[COMPONENT_PRINCIPLES.md](COMPONENT_PRINCIPLES.md)** - Complete guide to component cohesion (REP, CCP, CRP) and coupling (ADP, SDP, SAP)
+- **[DEPENDENCY_RULE.md](DEPENDENCY_RULE.md)** - The fundamental rule of clean architecture: dependencies point inward
 
 **Architectural Patterns:**
-- **BUSINESS_RULES.md** - Entities and use cases
-- **CLEAN_ARCHITECTURE_LAYERS.md** - The dependency rule
-- **SCREAMING_ARCHITECTURE.md** - Architecture that reveals intent
-- **HUMBLE_OBJECTS.md** - Separating testable from hard-to-test code
+- **[PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md)** - Building flexible, extensible systems with dependency inversion
+- **[ARCHITECTURAL_BOUNDARIES.md](ARCHITECTURAL_BOUNDARIES.md)** - Where to draw lines that separate concerns
+- **[SCREAMING_ARCHITECTURE.md](SCREAMING_ARCHITECTURE.md)** - Making architecture reveal business intent, not frameworks
+- **[BUSINESS_RULES.md](BUSINESS_RULES.md)** - Entities and use cases: the heart of clean architecture
+- **[HUMBLE_OBJECTS.md](HUMBLE_OBJECTS.md)** - Separating testable logic from hard-to-test infrastructure
+
+### Future Guides (Optional)
+
+**Individual SOLID Principle Guides:**
+- **SINGLE_RESPONSIBILITY_PRINCIPLE.md** - Deep dive into SRP (extracted from SOLID_PRINCIPLES.md)
+- **OPEN_CLOSED_PRINCIPLE.md** - Deep dive into OCP (extracted from SOLID_PRINCIPLES.md)
+- **LISKOV_SUBSTITUTION_PRINCIPLE.md** - Deep dive into LSP (extracted from SOLID_PRINCIPLES.md)
+- **INTERFACE_SEGREGATION_PRINCIPLE.md** - Deep dive into ISP (extracted from SOLID_PRINCIPLES.md)
+- **DEPENDENCY_INVERSION_PRINCIPLE.md** - Deep dive into DIP (extracted from SOLID_PRINCIPLES.md)
+
+**Additional Component Guides:**
+- **DEPENDENCY_MANAGEMENT.md** - Advanced dependency management strategies
 
 ## Key Principles
 
