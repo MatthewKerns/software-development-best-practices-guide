@@ -11,12 +11,12 @@
 **What's Included**:
 - ✅ **01-foundations/** - All 7 core coding guides
 - ✅ **02-design-in-code/** - All 4 design guides
-- ⚠️ **03-clean-architecture/** - 3 of 7 architecture guides (SOLID, components, dependencies)
+- ✅ **03-clean-architecture/** - All 8 architecture guides (SOLID, components, boundaries, patterns)
 - ✅ **04-quality-through-testing/** - All 6 testing guides
 - ✅ **05-refactoring-and-improvement/** - All 4 refactoring guides
 - ✅ **06-collaborative-construction/** - All 5 team practice guides
 - ✅ **07-agentic-coding/** - All 15 AI-assisted development guides
-- ✅ **08-project-management/** - All 6 planning & organization guides
+- ✅ **08-project-management/** - All 8 planning & organization guides (including BRD)
 - ✅ **09-production-readiness/** - All 10 production deployment guides
 - ✅ **10-geist-gap-analysis-framework/** - All 3 gap analysis guides
 - ✅ **99-reference/** - All 8 quick reference checklists
@@ -65,12 +65,16 @@ software-development-best-practices-guide/
 │   ├── CLASS_DESIGN.md                ✅ Class design principles (5,900+ words)
 │   └── WORKING_CLASSES.md             ✅ Working with classes (4,600+ words)
 │
-├── 03-clean-architecture/             # SOLID & architectural patterns (3/7 guides)
+├── 03-clean-architecture/ ✅          # SOLID & architectural patterns - COMPLETE
 │   ├── README.md                      ✅ Directory overview
-│   ├── SOLID_PRINCIPLES.md            ✅ SOLID principles (8,900+ words)
-│   ├── COMPONENT_PRINCIPLES.md        ✅ Component cohesion/coupling (6,000+ words)
-│   ├── DEPENDENCY_RULE.md             ✅ Dependency management (5,200+ words)
-│   └── (Additional guides planned: boundaries, layers, use cases, entities)
+│   ├── SOLID_PRINCIPLES.md            ✅ All 5 SOLID principles (65k chars)
+│   ├── COMPONENT_PRINCIPLES.md        ✅ Component cohesion/coupling (44k chars)
+│   ├── DEPENDENCY_RULE.md             ✅ Dependency rule and layers (39k chars)
+│   ├── PLUGIN_ARCHITECTURE.md         ✅ Building flexible systems (107k chars)
+│   ├── ARCHITECTURAL_BOUNDARIES.md    ✅ Drawing boundaries (94k chars)
+│   ├── SCREAMING_ARCHITECTURE.md      ✅ Intent-revealing architecture (80k chars)
+│   ├── BUSINESS_RULES.md              ✅ Entities and use cases (103k chars)
+│   └── HUMBLE_OBJECTS.md              ✅ Testable vs hard-to-test separation (91k chars)
 │
 ├── 04-quality-through-testing/ ✅     # Testing practices - COMPLETE
 │   ├── README.md                      ✅ Directory overview
@@ -105,10 +109,12 @@ software-development-best-practices-guide/
 │
 ├── 08-project-management/ ✅          # Planning & organization - COMPLETE
 │   ├── README.md                      ✅ Directory overview
-│   ├── PROJECT_ORGANIZATION.md        ✅ File organization
+│   ├── BRD_CREATION_GUIDELINES.md     ✅ Business Requirements Document guide (47k chars)
+│   ├── BRD_TEMPLATE.md                ✅ Complete BRD template (39k chars)
+│   ├── PROJECT_ORGANIZATION.md        ✅ File organization standards
 │   ├── MARKDOWN_PLAN_TEMPLATE.md      ✅ Implementation plan template
 │   ├── MARKDOWN_PLAN_TEMPLATE_USAGE.md  ✅ Template usage guide
-│   ├── GITHUB_ISSUE_CREATION_GUIDE.md  ✅ Issue creation standards
+│   ├── GITHUB_ISSUE_CREATION_GUIDE.md  ✅ Issue creation standards (22k chars)
 │   └── python-dependency-cache-guidance.md  ✅ Python dependency management
 │
 ├── 09-production-readiness/ ✅        # Production deployment - COMPLETE
@@ -192,12 +198,12 @@ Jump to areas where you need improvement:
 
 - **Code Quality Issues?** → [01-foundations/](01-foundations/) - 7 comprehensive guides
 - **Design Problems?** → [02-design-in-code/](02-design-in-code/) - 4 design guides
-- **Architecture Problems?** → [03-clean-architecture/](03-clean-architecture/) - SOLID & component principles
+- **Architecture Problems?** → [03-clean-architecture/](03-clean-architecture/) - 8 comprehensive architecture guides
 - **Testing Gaps?** → [04-quality-through-testing/](04-quality-through-testing/) - 6 testing guides
 - **Refactoring Legacy Code?** → [05-refactoring-and-improvement/](05-refactoring-and-improvement/) - 4 refactoring guides
 - **Team Collaboration?** → [06-collaborative-construction/](06-collaborative-construction/) - 5 team practice guides
 - **AI-Assisted Development?** → [07-agentic-coding/](07-agentic-coding/) - 15 agentic coding guides
-- **Project Planning?** → [08-project-management/](08-project-management/) - 6 planning & organization guides
+- **Project Planning?** → [08-project-management/](08-project-management/) - 8 planning & organization guides (including BRD)
 - **Production Deployment?** → [09-production-readiness/](09-production-readiness/) - 10 production readiness guides
 - **Mysterious Bugs or Incomplete Features?** → [10-geist-gap-analysis-framework/](10-geist-gap-analysis-framework/) - Advanced gap analysis
 
@@ -247,18 +253,25 @@ Design decisions made during coding: routine structure, complexity management, c
 
 ---
 
-### 03-clean-architecture/ (3/7 guides complete)
+### 03-clean-architecture/ ✅ **COMPLETE**
 
-**SOLID principles and component design from Clean Architecture**
+**SOLID principles and architectural patterns from Clean Architecture**
 
-Architectural principles that guide system structure: SOLID principles, component cohesion and coupling, architectural boundaries.
+Architectural principles that guide system structure from class-level design through system-wide patterns. Covers SOLID principles, component organization, dependency management, and practical architectural patterns.
 
-**Available Guides** (~20,000 words total):
-- ✅ [SOLID_PRINCIPLES.md](03-clean-architecture/SOLID_PRINCIPLES.md) - Complete SOLID principles guide (8,900+ words)
-- ✅ [COMPONENT_PRINCIPLES.md](03-clean-architecture/COMPONENT_PRINCIPLES.md) - Component cohesion and coupling (6,000+ words)
-- ✅ [DEPENDENCY_RULE.md](03-clean-architecture/DEPENDENCY_RULE.md) - Dependency management and inversion (5,200+ words)
+**All 8 Guides Complete** (~130,000 characters total):
 
-**Coming Soon**: Architectural boundaries, layers and use cases, entities and domain models, architectural patterns
+**Foundational Principles:**
+- ✅ [SOLID_PRINCIPLES.md](03-clean-architecture/SOLID_PRINCIPLES.md) - Complete guide to all 5 SOLID principles (SRP, OCP, LSP, ISP, DIP)
+- ✅ [COMPONENT_PRINCIPLES.md](03-clean-architecture/COMPONENT_PRINCIPLES.md) - Component cohesion (REP, CCP, CRP) and coupling (ADP, SDP, SAP)
+- ✅ [DEPENDENCY_RULE.md](03-clean-architecture/DEPENDENCY_RULE.md) - The fundamental rule: dependencies point inward
+
+**Architectural Patterns:**
+- ✅ [PLUGIN_ARCHITECTURE.md](03-clean-architecture/PLUGIN_ARCHITECTURE.md) - Building flexible, extensible systems with dependency inversion
+- ✅ [ARCHITECTURAL_BOUNDARIES.md](03-clean-architecture/ARCHITECTURAL_BOUNDARIES.md) - Where to draw lines that separate concerns
+- ✅ [SCREAMING_ARCHITECTURE.md](03-clean-architecture/SCREAMING_ARCHITECTURE.md) - Making architecture reveal business intent, not frameworks
+- ✅ [BUSINESS_RULES.md](03-clean-architecture/BUSINESS_RULES.md) - Entities and use cases: the heart of clean architecture
+- ✅ [HUMBLE_OBJECTS.md](03-clean-architecture/HUMBLE_OBJECTS.md) - Separating testable logic from hard-to-test infrastructure
 
 📖 [View Directory README](03-clean-architecture/README.md)
 
@@ -358,13 +371,19 @@ Comprehensive guidance for working effectively with AI coding assistants (Claude
 
 **Planning and organization from Code Complete 2 and Agile practices**
 
-Project planning, documentation templates, issue tracking standards, and development workflow management.
+Project planning, business requirements, documentation templates, issue tracking standards, and development workflow management.
 
-**All 6 Guides Complete** (~15,000+ words total):
+**All 8 Guides Complete** (~150,000+ characters total):
+
+**Business Requirements:**
+- ✅ [BRD_CREATION_GUIDELINES.md](08-project-management/BRD_CREATION_GUIDELINES.md) - How to create Business Requirements Documents (47k chars)
+- ✅ [BRD_TEMPLATE.md](08-project-management/BRD_TEMPLATE.md) - Complete BRD template with all sections (39k chars)
+
+**Planning & Organization:**
 - ✅ [PROJECT_ORGANIZATION.md](08-project-management/PROJECT_ORGANIZATION.md) - File and directory organization standards
 - ✅ [MARKDOWN_PLAN_TEMPLATE.md](08-project-management/MARKDOWN_PLAN_TEMPLATE.md) - Implementation plan template
 - ✅ [MARKDOWN_PLAN_TEMPLATE_USAGE.md](08-project-management/MARKDOWN_PLAN_TEMPLATE_USAGE.md) - How to use the template effectively
-- ✅ [GITHUB_ISSUE_CREATION_GUIDE.md](08-project-management/GITHUB_ISSUE_CREATION_GUIDE.md) - Creating well-structured issues
+- ✅ [GITHUB_ISSUE_CREATION_GUIDE.md](08-project-management/GITHUB_ISSUE_CREATION_GUIDE.md) - Creating well-structured issues (22k chars)
 - ✅ [python-dependency-cache-guidance.md](08-project-management/python-dependency-cache-guidance.md) - Python dependency management
 - ✅ [README.md](08-project-management/README.md) - Comprehensive project management overview
 
@@ -563,20 +582,18 @@ Both agent instruction files reference these best practice guides.
 
 ### Complete Sections
 
-**9 complete sections** ready for immediate use:
+**10 complete sections** ready for immediate use:
 - ✅ 01-foundations (7 guides)
 - ✅ 02-design-in-code (4 guides)
+- ✅ 03-clean-architecture (8 guides) 🎉 **NEWLY COMPLETE**
 - ✅ 04-quality-through-testing (6 guides)
 - ✅ 05-refactoring-and-improvement (4 guides)
 - ✅ 06-collaborative-construction (5 guides)
 - ✅ 07-agentic-coding (15 guides)
-- ✅ 08-project-management (6 guides)
+- ✅ 08-project-management (8 guides)
 - ✅ 09-production-readiness (10 guides)
 - ✅ 10-geist-gap-analysis-framework (3 guides)
 - ✅ 99-reference (8 checklists)
-
-**In Progress**:
-- ⚠️ 03-clean-architecture (3 of 7 guides complete)
 
 ### Section Details
 
@@ -595,14 +612,15 @@ Both agent instruction files reference these best practice guides.
 - CLASS_DESIGN.md
 - WORKING_CLASSES.md
 
-#### 03-clean-architecture ⚠️
-- ✅ SOLID_PRINCIPLES.md
-- ✅ COMPONENT_PRINCIPLES.md
-- ✅ DEPENDENCY_RULE.md
-- ⏳ Architectural boundaries
-- ⏳ Layers and use cases
-- ⏳ Entities and domain models
-- ⏳ Architectural patterns
+#### 03-clean-architecture ✅
+- SOLID_PRINCIPLES.md
+- COMPONENT_PRINCIPLES.md
+- DEPENDENCY_RULE.md
+- PLUGIN_ARCHITECTURE.md
+- ARCHITECTURAL_BOUNDARIES.md
+- SCREAMING_ARCHITECTURE.md
+- BUSINESS_RULES.md
+- HUMBLE_OBJECTS.md
 
 #### 04-quality-through-testing ✅
 - DEVELOPER_TESTING.md
@@ -647,6 +665,8 @@ Both agent instruction files reference these best practice guides.
 - HUMAN_COMPUTE_TIME_OPTIMIZATION.md
 
 #### 08-project-management ✅
+- BRD_CREATION_GUIDELINES.md
+- BRD_TEMPLATE.md
 - PROJECT_ORGANIZATION.md
 - MARKDOWN_PLAN_TEMPLATE.md
 - MARKDOWN_PLAN_TEMPLATE_USAGE.md
