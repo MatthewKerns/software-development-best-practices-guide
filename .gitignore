@@ -12,3 +12,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.log
+
+# Claude Code local settings (user-specific paths)
+.claude/settings.local.json
