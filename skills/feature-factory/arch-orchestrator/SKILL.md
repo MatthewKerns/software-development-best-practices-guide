@@ -1,7 +1,78 @@
 ---
 name: arch-orchestrator
-description: Master orchestrator for the Architecture bucket of the Feature Factory pipeline. Use this skill at the START of any new feature, when reviewing whether a feature fits the current architecture, when deciding if architectural changes are warranted, or when producing an Architecture Decision Record (ADR). Triggers on phrases like "architecture review for feature X", "should this feature warrant arch changes", "where does this fit in the codebase", "create an ADR", "feature spec ready for arch review", or whenever a Clockify entry uses the bucket tag `arch`. This skill directs you to the right sub-agent or sub-skill for each step of architectural work and references the best-practices guide for design principles.
+description: Master orchestrator for the Architecture bucket of the Feature Factory pipeline AND the canonical entry point for any new feature build. Use this skill at the START of any new feature, when the user asks to build, ship, or deliver a feature end-to-end, when reviewing whether a feature fits the current architecture, when deciding if architectural changes are warranted, or when producing an Architecture Decision Record (ADR). Triggers on phrases like "build feature X", "ship this feature", "let's build", "use the feature factory", "large feature build", "deliver this end to end", "architecture review for feature X", "should this feature warrant arch changes", "where does this fit in the codebase", "create an ADR", "feature spec ready for arch review", or whenever a Clockify entry uses the bucket tag `arch`. When triggered as a pipeline entry point (vs. a pure ADR request), this skill produces `arch.md` and then hands off to func-orchestrator for implementation, with errors-/obsv-/review-/docs-orchestrator following per the pipeline. This skill directs you to the right sub-agent or sub-skill for each step of architectural work and references the best-practices guide for design principles.
 allowed-tools: [Read, Grep, Glob]
+---
+
+## Reference Resolution
+
+This skill references files in the best-practices guide using relative paths like `01-foundations/ERROR_HANDLING.md`. To open them, find the guide repo root using whichever applies:
+
+- **Project-install (recommended):** the guide is a git submodule at `.feature-factory/guide/` from the project root. Read references from `<project_root>/.feature-factory/guide/<reference>`.
+- **Personal-install:** this SKILL.md is a symlink. The guide repo root is two directories above this orchestrator's directory (`<symlink_target>/../../..`). Use `realpath` on this SKILL.md if you need the absolute path.
+
+If neither resolves, ask the user where the guide repo lives before continuing.
+
+## Output Location (per-feature artifacts)
+
+All artifacts produced by this orchestrator (`arch.md`, `func.md`, `errors.md`, `observability.md`, `review.md`, `runbook.md`) MUST be written to a per-feature subfolder under `.feature-factory/<feature-slug>/` from the project root, NOT to the flat `.feature-factory/` root.
+
+- `<feature-slug>` is the feature name in kebab-case (e.g., `settings-sidebar`, `bank-transactions`, `payment-projection`).
+- If the feature lacks an obvious slug, derive one from the user's description and confirm before writing.
+- Create the directory if it doesn't exist.
+- The `.feature-factory/guide/` submodule path is reserved — never use `guide` as a feature slug.
+
+Examples: `.feature-factory/settings-sidebar/arch.md`, `.feature-factory/settings-sidebar/func.md`. This convention prevents per-feature artifacts from colliding when multiple features are built in the same project.
+
+When the body of this SKILL.md or any sub-skill references writing to `.feature-factory/<artifact>.md` without a feature-slug subfolder, interpret it as `.feature-factory/<feature-slug>/<artifact>.md`.
+
+## Feature Folder Lifecycle
+
+The `<feature-slug>/` folder is the canonical home for this feature's artifacts and outlasts any single PR. Multi-PR features and multi-feature PRs are handled below.
+
+### On first invocation for a new feature
+
+1. **Resolve slug.** If the user hasn't named the feature, propose a kebab-case slug derived from their request. Confirm before proceeding. The `.feature-factory/guide/` and `.feature-factory/_pr-prep/` paths are reserved — never use as feature slugs.
+2. **Auto-create folder.** `mkdir -p .feature-factory/<feature-slug>/` if absent. Prompt once: "Creating `.feature-factory/<feature-slug>/` for this feature — proceed?" Default yes.
+3. **Initialize `pr-history.md`.** If absent, create it with the schema below. pr-prep appends rows; the orchestrator updates statuses.
+
+### Multi-PR features
+
+This feature folder accumulates updates across PRs. Each bucket file (`arch.md`, `func.md`, `errors.md`, `observability.md`, `runbook.md`) grows over time:
+
+- **Do NOT overwrite** prior PR's content.
+- **Append a new dated, PR-numbered section.** Example:
+  ```markdown
+  ## PR #11 update — 2026-05-15
+
+  - Added retry policy for X (FR-Y)
+  - Updated failure mode 4: …
+  ```
+
+`review.md` is the exception: each PR adds a top-level section (`## PR #N Review`) capturing that PR's review pass; older sections remain.
+
+### Multi-feature PRs
+
+A single PR may touch this feature alongside others. The orchestrator runs per-feature; you operate on `.feature-factory/<feature-slug>/` only. Cross-feature integration concerns belong in the consuming feature's `arch.md`, not here.
+
+### `pr-history.md` schema
+
+```markdown
+# PR History — <feature-slug>
+
+Back-reference index of PRs that have shipped or modified this feature.
+
+| PR | Status | Date | Branch | Summary | Audit folder |
+|----|--------|------|--------|---------|--------------|
+| #N | in-progress \| open \| merged \| closed | YYYY-MM-DD | <branch> | One-line summary | [`_pr-prep/pr-N-<short-slug>/`](../_pr-prep/pr-N-<short-slug>/) |
+```
+
+`pr-prep`'s Phase 4 (synthesis) appends a row each time it runs against a PR touching this feature. The orchestrator updates the row's "Status" if the PR has progressed.
+
+### Per-PR pr-prep folder reference
+
+When `pr-prep` runs for a PR touching this feature, it writes its outputs to `.feature-factory/_pr-prep/pr-<N>-<short-slug>/`. Cross-link from your bucket files using relative paths (e.g., `../_pr-prep/pr-9-catalog-sync-dropdown/code-test-audit.md`) when referencing diff-scoped findings.
+
 ---
 
 # Architecture Orchestrator (ARCH bucket master)

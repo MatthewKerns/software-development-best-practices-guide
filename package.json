@@ -1,6 +1,6 @@
 {
   "name": "@matthewkerns/software-development-best-practices-guide",
-  "version": "1.3.13",
+  "version": "1.4.0",
   "description": "A comprehensive, project-agnostic guide synthesizing principles from Code Complete 2, Clean Code, and Clean Architecture",
   "main": "index.js",
   "repository": {
@@ -38,6 +38,8 @@
     "10-geist-gap-analysis-framework/**/*.md",
     "99-reference/**/*.md",
     "skills/**/*.md",
+    "skills/**/*.py",
+    "skills/**/*.yaml",
     "docs/**/*.md",
     "README.md",
     "CLAUDE.md",
