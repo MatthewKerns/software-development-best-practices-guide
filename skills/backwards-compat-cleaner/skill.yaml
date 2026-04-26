@@ -1,0 +1,46 @@
+name: "backwards-compat-cleaner"
+description: "Systematically identifies and documents backwards compatibility code that can be removed in greenfield projects"
+trigger: |
+  When user says:
+  - "clean backwards compatibility"
+  - "remove legacy code"
+  - "find backwards compat"
+  - "/backwards-compat"
+  - "identify duplicate implementations"
+  - "cleanup greenfield project"
+version: "1.0.0"
+author: "Matthew Kerns"
+tags:
+  - cleanup
+  - refactoring
+  - technical-debt
+  - code-quality
+  - greenfield
+  - maintenance
+parameters:
+  - name: "project_path"
+    description: "Root path of the project to analyze"
+    required: false
+    default: "current directory"
+  - name: "focus_areas"
+    description: "Specific directories or file patterns to focus on"
+    required: false
+  - name: "auto_mode"
+    description: "Run in automatic mode with minimal prompts"
+    required: false
+    default: false
+required_tools:
+  - Glob
+  - Grep
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Git
+output:
+  directory: ".backwards-compat"
+  files:
+    - "findings.md"
+    - "removal-plan.md"
+    - "impact-analysis.md"
+    - "test-updates-needed.md"

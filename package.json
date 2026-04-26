@@ -40,6 +40,7 @@
     "skills/**/*.md",
     "skills/**/*.py",
     "skills/**/*.yaml",
+    "agents/**/*.md",
     "docs/**/*.md",
     "README.md",
     "CLAUDE.md",

@@ -1,0 +1,62 @@
+name: "documentation-consolidator"
+description: "Analyzes and reorganizes documentation to maintain clear sources of truth and archive status/update documents"
+trigger: |
+  When user says:
+  - "consolidate documentation"
+  - "organize docs"
+  - "cleanup documentation"
+  - "archive status docs"
+  - "/doc-consolidate"
+  - "fix documentation structure"
+  - "update documentation to match code"
+version: "1.0.0"
+author: "Matthew Kerns"
+tags:
+  - documentation
+  - organization
+  - maintenance
+  - cleanup
+  - source-of-truth
+  - archival
+parameters:
+  - name: "project_path"
+    description: "Root path of the project to analyze"
+    required: false
+    default: "current directory"
+  - name: "focus_areas"
+    description: "Specific documentation directories to focus on (e.g., 'docs/', 'README.md')"
+    required: false
+    default: "docs/, *.md, README.md, CLAUDE.md"
+  - name: "archive_location"
+    description: "Pattern for archive folder placement (e.g., 'archive', 'historical', '.archive')"
+    required: false
+    default: "archive"
+  - name: "dry_run"
+    description: "Preview changes without actually moving files"
+    required: false
+    default: true
+  - name: "update_references"
+    description: "Update references in other files when moving documents"
+    required: false
+    default: true
+  - name: "sync_with_code"
+    description: "Update documentation to match current code implementation"
+    required: false
+    default: true
+required_tools:
+  - Glob
+  - Grep
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Git
+output:
+  directory: ".doc-consolidation"
+  files:
+    - "consolidation-report.md"
+    - "archive-plan.md"
+    - "source-of-truth-map.md"
+    - "code-sync-updates.md"
+    - "reference-updates.md"
+    - "CLAUDE-md-updates.md"
