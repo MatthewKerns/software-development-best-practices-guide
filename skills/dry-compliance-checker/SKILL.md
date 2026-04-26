@@ -26,6 +26,19 @@ Prevents code duplication by identifying existing functionality and patterns BEF
 - "Pre-emptive check: does email sending logic exist?"
 - "Find all pagination implementations for reuse"
 
+## Two-Stage Use in the Feature Factory Pipeline
+
+This skill is intentionally invoked at TWO points in the FF pipeline. The two calls have different scopes and are NOT redundant:
+
+| Stage | Trigger | Search scope | Purpose |
+|-------|---------|--------------|---------|
+| **FUNC bucket — pre-emptive** (`func-orchestrator`) | Before writing new code (TDD RED phase) | Existing codebase outside this feature's diff | Avoid rebuilding what already exists; choose REUSE / EXTEND / EXTRACT before any keystroke goes in |
+| **REVIEW bucket — post-implementation** (`review-orchestrator`) | After FUNC + ERRORS + OBSV have produced code, before PR | The diff itself + recently-touched files | Catch new duplication that surfaced because ERRORS/OBSV added retry/logging that mirrors existing patterns the feature also added |
+
+**Avoiding double-flagging:** when invoked from REVIEW, read `.feature-factory/<feature-slug>/func.md`'s "DRY check (pre-emptive)" section first. Patterns that FUNC explicitly accepted as duplication (e.g., "duplicated, but Rule of Three not yet met") should NOT be re-flagged unless a third instance now exists or the duplication moved into hot paths.
+
+If invoked outside the FF pipeline, run normally — no two-stage coordination needed.
+
 ## Why Pre-Emptive Detection Matters
 
 ### The Cost of Reactive Duplication Discovery

@@ -90,7 +90,23 @@ For each file that was refactored:
 3. Verify re-exports exist if the plan called for API preservation
 4. Check for any `// @ts-ignore` or `as any` that was added to make things compile
 
-### 6. Produce Validation Report
+### 6. Cross-Check Feature Factory `review.md` Claims (when in FF context)
+
+If `.feature-factory/<feature-slug>/review.md` exists for the active feature, parse it and verify the diff actually addresses what was promised. Detect FF context the same way `refactor-pipeline` does (walk up to find `.feature-factory/`, identify the active feature slug from a single folder or the most-recent `in-progress` row in `pr-history.md`).
+
+For each finding in `review.md` tagged `[CRITICAL]`, `[BLOCKER]`, or `[ISSUE]` AND marked "Fix in this PR" (or any equivalent commit-now disposition):
+
+1. Locate the original smell (`<file>:<line>` from the finding) — verify it is no longer present, OR
+2. Verify the relevant pattern has been refactored away (cross-reference with refactor-executor's commit messages in `.feature-factory/_refactor/<timestamp>/plan.md`).
+3. If neither: emit a validator failure with the finding's original severity label. The verdict drops to `FAIL` for `[CRITICAL]`/`[BLOCKER]` unfixed, `PASS WITH NOTES` for `[ISSUE]`.
+
+Findings tagged `[SUGGESTION]`, `[QUESTION]`, `[NITPICK]`, or `[PRAISE]` are informational only — never gate validation on them.
+
+If no `review.md` exists (standalone refactor outside FF), skip this step.
+
+This catches drift between what `review-orchestrator` promised to fix and what actually shipped, before pr-prep's Agent 2 has to flag it post-PR.
+
+### 7. Produce Validation Report
 
 Output format:
 

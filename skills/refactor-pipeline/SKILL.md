@@ -8,6 +8,39 @@ allowed-tools: [Read, Grep, Glob, Edit, Write, Bash, Agent]
 
 Orchestrate the full refactoring workflow: detect smells, plan fixes, execute changes, validate results. This skill composes the four specialized refactoring skills into a coherent pipeline, managing handoffs and ensuring insights from each phase inform the next.
 
+## Output Location (Feature Factory aware)
+
+This pipeline is FF-aware. When invoked inside a project that uses the Feature Factory layout (`.feature-factory/<feature-slug>/` exists), append findings to that feature's `review.md` rather than producing standalone reports.
+
+**FF context detection:**
+1. Walk up from the current working directory to the project root (the directory containing `.feature-factory/`).
+2. Identify the active feature slug:
+   - If `.feature-factory/` contains exactly one feature folder (other than reserved `guide/`, `_pr-prep/`, `_refactor/`), that's the active feature.
+   - If multiple, prefer the slug whose `pr-history.md` shows the most recent row in `in-progress` or `open` state.
+   - If still ambiguous, **ask the user** which feature this refactoring belongs to before writing any output.
+
+**FF-context outputs (preferred):**
+- Append a section to `.feature-factory/<feature-slug>/review.md`:
+
+  ```markdown
+  ## Refactor Pass — YYYY-MM-DD
+
+  **Scope:** {files analyzed}
+  **Smells fixed:** {count by severity, using labels from CODE_REVIEW_CHECKLIST.md — [CRITICAL]/[BLOCKER]/[ISSUE]/[SUGGESTION]/[NITPICK]}
+  **SOLID issues addressed:** {count}
+  **Before/after metrics:** LOC {before} → {after} ({pct}%); functions {before} → {after}
+  **Validator verdict:** PASS | PASS WITH NOTES | FAIL
+
+  See `.feature-factory/_refactor/YYYY-MM-DD-HHMMSS/` for the full smell report, plan, and validation report.
+  ```
+
+- Detailed reports (smell JSON, refactoring plan, validation report) still go to `.feature-factory/_refactor/<timestamp>/` so `review.md` stays scannable.
+
+**Standalone outputs (no FF context):**
+- All reports go to `.feature-factory/_refactor/<timestamp>/` if `.feature-factory/` exists, or `_refactor-output/<timestamp>/` at project root otherwise.
+
+**Why this matters:** when the pipeline runs inside an FF feature, `refactor-validator` cross-checks the `## Refactor Pass` section's findings against the diff. Standalone runs skip that cross-check (no `review.md` to verify against).
+
 ## Why an Orchestrator Exists
 
 Each refactoring skill is focused by design (SRP for skills). But refactoring is inherently a connected workflow — the detector's findings constrain the planner's options, the planner's dependency analysis constrains the executor's parallelism, and the validator's findings might send you back to the executor. This orchestrator manages those connections so insights don't get lost between phases.

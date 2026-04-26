@@ -1,232 +1,202 @@
-# Integration: Orchestrators ↔ `pr-prep` Skill
+# Integration: Feature Factory ↔ pr-prep ↔ refactor-pipeline
 
-## The Problem This Document Solves
+This doc describes how the three skill families compose end-to-end during a feature build. It supersedes any older flow diagrams that referenced `_bmad-output/pr-prep/` or `docs/pr-prep/pr{N}/` — those paths are retired per pr-prep Spec 4 (artifact organization).
 
-The existing `pr-prep` skill produces artifacts in `_bmad-output/pr-prep/`. The orchestrators produce artifacts in `.feature-factory/` inside each feature's worktree. Without explicit integration, these two document trees duplicate effort, drift out of sync, and create exactly the "which version is current?" problem that PR #6's retrospective called out.
+---
 
-This doc defines how the two fit together so that orchestrator artifacts are the single source of truth, and `pr-prep` consumes them rather than regenerating parallel docs.
+## The Canonical Layout
+
+Everything for a feature lives under `.feature-factory/` at the project root:
+
+```
+.feature-factory/
+├── guide/                                 ← (reserved) git submodule of best-practices guide, when used
+├── <feature-slug>/                        ← per-feature folder (owned by FF orchestrators)
+│   ├── arch.md                            ← arch-orchestrator
+│   ├── func.md                            ← func-orchestrator
+│   ├── errors.md                          ← errors-orchestrator
+│   ├── observability.md                   ← obsv-orchestrator
+│   ├── review.md                          ← review-orchestrator (refactor-pipeline appends here too)
+│   ├── runbook.md                         ← docs-orchestrator
+│   └── pr-history.md                      ← pr-prep (sole writer of new rows)
+├── _pr-prep/                              ← (reserved) PR-scoped pr-prep outputs
+│   └── pr-<N>-<short-slug>/
+│       ├── manifest.yaml
+│       ├── feature-factory-context.md     ← Phase 2c digest of upstream FF artifacts
+│       ├── updated-prd.md                 ← Phase 3 Agent 1
+│       ├── code-test-audit.md             ← Phase 3 Agent 2
+│       ├── docs-audit.md                  ← Phase 3 Agent 3
+│       ├── manual-testing-guide.md        ← Phase 3 Agent 4
+│       ├── pr-description.md              ← Phase 4 synthesis
+│       ├── docs-commit-plan.md            ← Phase 4.5 (per Spec 3)
+│       ├── proposed-claude-md-edits.md    ← Phase 4.5 (only when multi-section CLAUDE.md edit proposed)
+│       └── evidence/                      ← Phase 5b screenshots, Phase 6 recordings
+└── _refactor/                             ← (reserved) standalone refactor-pipeline reports
+    └── <YYYY-MM-DD-HHMMSS>/
+        ├── smell-report.json
+        ├── plan.md
+        └── validation-report.md
+```
+
+**Reserved paths** (cannot be used as feature slugs): `guide/`, `_pr-prep/`, `_refactor/`.
 
 ---
 
 ## The Flow
 
 ```
-                ┌──── During development (per feature) ────┐
-                │                                          │
-  ARCH ──► FUNC ─┬─► ERRORS ─┐                             │
-                ├─► OBSV ────┼─► DOCS                      │
-                └─► REVIEW ──┘                             │
-                                                           │
-  Artifacts in feature worktree:                           │
-  .feature-factory/arch.md                                 │
-  .feature-factory/func.md                                 │
-  .feature-factory/errors.md                               │
-  .feature-factory/observability.md                        │
-  .feature-factory/review.md                               │
-  .feature-factory/runbook.md                              │
-                │                                          │
-                └─────────── Feature complete ─────────────┘
-                                   │
-                                   ▼
-                      ┌── At PR time (per PR) ──┐
-                      │                         │
-                      │   pr-prep skill runs    │
-                      │                         │
-                      │   CONSUMES the six      │
-                      │   artifacts to produce: │
-                      │                         │
-                      │   - PR description      │
-                      │   - docs audit          │
-                      │   - testing guide       │
-                      │                         │
-                      └─────────────────────────┘
-                                   │
-                                   ▼
-            ┌── Promote artifacts to docs/pr-prep/pr{N}/ ──┐
-            │                                               │
-            │  docs/pr-prep/pr{N}/arch.md                   │
-            │  docs/pr-prep/pr{N}/func.md                   │
-            │  docs/pr-prep/pr{N}/errors.md                 │
-            │  docs/pr-prep/pr{N}/observability.md          │
-            │  docs/pr-prep/pr{N}/review.md                 │
-            │  docs/pr-prep/pr{N}/runbook.md                │
-            │  docs/pr-prep/pr{N}/pr-description.md         │
-            │                                               │
-            │  _bmad-output/pr-prep/ is deleted             │
-            │                                               │
-            └───────────────────────────────────────────────┘
+                    ┌── During development (per feature) ──┐
+                    │                                       │
+ARCH ──► FUNC ─┬─► ERRORS ─┐                                │
+               ├─► OBSV ────┼─► DOCS ──► (PR ready)         │
+               └─► REVIEW ──┘    │                          │
+                  │              │                          │
+                  └─ may invoke refactor-pipeline           │
+                     (appends ## Refactor Pass section      │
+                      to <slug>/review.md when in FF context)│
+                                                            │
+                Artifacts in <slug>/:                       │
+                arch.md, func.md, errors.md,                │
+                observability.md, review.md, runbook.md     │
+                    │                                       │
+                    └────────── Feature complete ───────────┘
+                                       │
+                                       ▼
+                       ┌── At PR time (per PR) ──────────────┐
+                       │                                      │
+                       │  pr-prep runs                        │
+                       │  • Phase 1:  situation assessment    │
+                       │  • Phase 2:  scope (base + commits)  │
+                       │  • Phase 2c: detect FF artifacts,    │
+                       │              write FF context digest │
+                       │  • Phase 3:  4 parallel agents       │
+                       │              consume FF artifacts as │
+                       │              authoritative source    │
+                       │  • Phase 4:  synthesis + appends     │
+                       │              row to pr-history.md    │
+                       │  • Phase 4.5: docs commit plan       │
+                       │              (FF artifacts → docs/…) │
+                       │  • Phase 5+ (opt-in): assets,        │
+                       │              Excalidraw, E2E, video  │
+                       │                                      │
+                       │  Outputs to:                         │
+                       │  .feature-factory/_pr-prep/          │
+                       │    pr-<N>-<short-slug>/              │
+                       └──────────────────────────────────────┘
 ```
 
 ---
 
-## How the Six Artifacts Map to `pr-prep`'s Agent Outputs
+## Ownership Rules
 
-The existing `pr-prep` skill launches four parallel agents. Here's how their responsibilities should change when the orchestrator artifacts already exist:
+Single-writer rule — every artifact has exactly one owner. Other skills may read or update narrowly-defined fields, but never insert or rewrite content owned by another skill.
 
-| `pr-prep` Agent | Current Behavior | New Behavior with Orchestrators |
-|-----------------|------------------|----------------------------------|
-| **Agent 1 (PRD Gap Analysis)** | Reads PRD, maps FRs against code, produces `updated-prd.md` | Still does PRD gap analysis, but reads `arch.md` first for the decision record — no need to re-derive architectural intent from code |
-| **Agent 2 (Code/Test Audit)** | Produces `code-test-audit.md` from scratch | Reads `func.md` (implementation summary) + `review.md` (quality findings) — produces a **consolidated** audit that cites the existing artifacts, doesn't duplicate them |
-| **Agent 3 (Docs Audit)** | Finds stale docs, fixes in-place | Reads `runbook.md` for the new operational truth, updates any other docs (CLAUDE.md, READMEs) to match — the runbook is authoritative |
-| **Agent 4 (Manual Testing Guide)** | Generates scenarios from scratch | Reads `errors.md` (for negative-path tests) + `observability.md` (for "what should be observable"), produces a testing guide that maps to the already-enumerated failure modes |
-
-The key shift: `pr-prep` agents stop generating information and start **consolidating** what the orchestrators already captured during development.
-
----
-
-## Specific Changes to the `pr-prep` Skill
-
-These are the adjustments to the existing `pr-prep/SKILL.md` that would integrate the orchestrators. None of these require rewriting the skill — they're additions to existing phases.
-
-### Change 1: Phase 1 — Detect orchestrator artifacts
-
-Add to the "Situation Assessment" checks:
-
-```bash
-# Are there orchestrator artifacts for features in this PR?
-for worktree in $(git worktree list --porcelain | grep worktree | awk '{print $2}'); do
-  if [ -d "$worktree/.feature-factory" ]; then
-    echo "Found orchestrator artifacts in $worktree:"
-    ls "$worktree/.feature-factory/"
-  fi
-done
-```
-
-If orchestrator artifacts exist for any feature in the PR's commits, flag this in Phase 2b's assessment so the user knows the pr-prep run will be **consumption mode**, not **generation mode**.
-
-### Change 2: Phase 2 — Scope check references the dependency graph
-
-If `.feature-factory/arch.md` exists for the feature(s) in this PR, read the dependency graphs. Use them to validate:
-
-- Is every "Blocked By" entry actually merged or included in this PR?
-- Is every commit in the PR range covered by one of the ADRs?
-- Are there commits in the range that touch files outside the affected modules listed in the ADRs?
-
-Any mismatch surfaces as a scope drift flag before agents run.
-
-### Change 3: Phase 2b — Default to `--skip-assets`, not full run
-
-From the retrospective: "the pr-prep skill assumes assets before scope is locked. Phases 5a/5b/6 are heavy work with strong format opinions." The default should be analysis-only; assets are an explicit opt-in.
-
-Change the Phase 2b prompt to default to `no` for asset generation. Make `--with-assets` the explicit flag for the heavy path.
-
-### Change 4: Phase 4 — Promote artifacts, delete `_bmad-output/` copies
-
-At the end of Phase 4 (after the PR description is finalized), prompt:
-
-```
-📁 ARTIFACT PROMOTION
-
-The following orchestrator artifacts will be promoted to docs/pr-prep/pr{N}/:
-  .feature-factory/arch.md            → docs/pr-prep/pr{N}/arch.md
-  .feature-factory/func.md            → docs/pr-prep/pr{N}/func.md
-  .feature-factory/errors.md          → docs/pr-prep/pr{N}/errors.md
-  .feature-factory/observability.md   → docs/pr-prep/pr{N}/observability.md
-  .feature-factory/review.md          → docs/pr-prep/pr{N}/review.md
-  .feature-factory/runbook.md         → docs/pr-prep/pr{N}/runbook.md
-  _bmad-output/pr-prep/pr-description.md → docs/pr-prep/pr{N}/pr-description.md
-
-After promotion, _bmad-output/pr-prep/ will be deleted (single source of truth in docs/pr-prep/pr{N}/).
-
-Proceed? [yes / no / skip-delete]
-```
-
-This is the "shrink, don't grow" acid test from the retrospective, applied to pr-prep itself.
-
-### Change 5: PR Description Template — generated from artifacts, not hand-assembled
-
-The PR description should include a standard section per bucket, generated by reading the artifact headers:
-
-```markdown
-## Architecture
-See [arch.md](docs/pr-prep/pr{N}/arch.md) for the full ADR.
-- **Decision**: {one-line from arch.md's Decision section}
-- **Critical Path**: {from dependency graph}
-- **Affected Modules**: {from arch.md}
-
-## Implementation Summary
-See [func.md](docs/pr-prep/pr{N}/func.md) for details.
-- **What was built**: {one-line from func.md's What Was Built}
-- **Tests**: {coverage from func.md}
-- **Deviations from arch**: {from func.md}
-
-## Error Handling
-See [errors.md](docs/pr-prep/pr{N}/errors.md) for the full error matrix.
-- **Strategy**: {correctness / robustness / hybrid — from errors.md}
-- **External failure sources covered**: {count from matrix}
-- **PII fields redacted**: {from matrix}
-
-## Observability
-See [observability.md](docs/pr-prep/pr{N}/observability.md) for the full plan.
-- **Golden Signals coverage**: {from observability.md's coverage table}
-- **Metrics added**: {count}
-- **Alerts added**: {list}
-
-## Review Findings
-See [review.md](docs/pr-prep/pr{N}/review.md) for the full review.
-- **Critical / Blocker / Issue findings fixed**: {counts}
-- **Follow-up tickets created**: {count with links}
-
-## Runbook
-See [runbook.md](docs/pr-prep/pr{N}/runbook.md) for operational guidance.
-- **Error resolution entries**: {count}
-- **Metric interpretation entries**: {count}
-```
-
-This is the retrospective's "Phase table is the single status rollup" recommendation — the PR body is a view over the artifacts, never a separate activity log that drifts.
+| Artifact | Owner | Other skills' rights |
+|----------|-------|----------------------|
+| `<slug>/arch.md` | arch-orchestrator | Multi-PR features: orchestrator appends `## PR #N update — YYYY-MM-DD` sections; never overwrites prior content |
+| `<slug>/func.md` | func-orchestrator | Same append-only multi-PR rule |
+| `<slug>/errors.md` | errors-orchestrator | Same append-only multi-PR rule |
+| `<slug>/observability.md` | obsv-orchestrator | Same append-only multi-PR rule |
+| `<slug>/review.md` | review-orchestrator | refactor-pipeline appends `## Refactor Pass — YYYY-MM-DD` sections; each new PR adds a `## PR #N Review` heading |
+| `<slug>/runbook.md` | docs-orchestrator | Same append-only multi-PR rule |
+| `<slug>/pr-history.md` | **pr-prep** (sole writer of new rows) | Orchestrators may update `Status` column on existing rows (e.g., `in-progress` → `merged`) but never insert new rows |
+| `_pr-prep/pr-<N>-<short-slug>/` | pr-prep | All files inside |
+| `_refactor/<timestamp>/` | refactor-pipeline | Standalone reports (when no FF context) |
 
 ---
 
-## Addressing the Retrospective's Refinements (A–I)
+## How pr-prep Consumes FF Artifacts (Phase 2c → 3)
 
-The retrospective listed nine refinements to the pr-prep skill. Here's how the orchestrator integration addresses each:
+Phase 2c (FF detection) reads every `.feature-factory/<slug>/` folder touched by the PR's commits and produces `feature-factory-context.md`. This file is the FIRST input to each Phase 3 agent. Agents read it before any code.
 
-| # | Retrospective Refinement | How orchestrator integration helps |
-|---|---------------------------|-------------------------------------|
-| A | Collapse the doc tree to one source of truth per artifact | ✅ Orchestrator artifacts in `.feature-factory/` are promoted to `docs/pr-prep/pr{N}/`; `_bmad-output/` is deleted at Phase 4 end |
-| B | Phase 0 — Scope freeze before any analysis | ✅ The ADR in `arch.md` is the scope freeze; pr-prep's Phase 2 validates the PR against the dependency graph |
-| C | "Diff since last prep" refresh mode | ✅ When orchestrator artifacts exist, pr-prep runs in consumption mode (refresh the PR body from artifacts, don't regenerate) |
-| D | Phase table is the single status rollup | ✅ PR description is generated from artifact headers, never hand-assembled |
-| E | Split the skill in two (`pr-prep` vs `pr-prep-assets`) | ⚠️ Complementary change — Phase 2b default becomes `--skip-assets`; `--with-assets` is explicit opt-in |
-| F | Commit cadence rule for docs | ⚠️ Complementary change to pr-prep — suggest squash when 3+ docs-only commits pile up |
-| G | Move "Decisions made" to top of progress doc | ✅ The ADR in `arch.md` puts the Decision in the third section; runbook's error resolution is at the top |
-| H | CI-first discipline while draft | ⚠️ Not solved by orchestrators — push-on-commit is a git workflow discipline |
-| I | Every deferral names a target PR | ✅ The ADR's dependency graph requires target-PR naming for blocked/blocking features |
+| pr-prep Agent | Reads from FF artifacts | Produces |
+|---------------|-------------------------|----------|
+| Agent 1 — PRD Gap | `arch.md` (decision, dependency graph), `func.md` (deviations) | `updated-prd.md` |
+| Agent 2 — Code/Test Audit | `func.md` (impl summary), `review.md` ("Fix in this PR" claims, refactor-pass sections) | `code-test-audit.md` (Table 3 verifies review.md claims against the diff) |
+| Agent 3 — Docs Audit | `runbook.md`, `arch.md`, `errors.md`, `observability.md` (maps each to a committed docs target; flags unmapped for Phase 4.5) | `docs-audit.md` |
+| Agent 4 — Manual Testing | `errors.md` (negative paths), `observability.md` (what should be observable) | `manual-testing-guide.md` |
 
-Five of nine are structurally addressed by the integration. Three more (E, F, H) are complementary pr-prep changes that don't conflict with the orchestrators — they can be adopted independently.
+The agents **consolidate**, they don't re-derive. If FF artifacts are absent, agents fall back to deriving from code (legacy mode).
 
 ---
 
-## Migration Strategy
+## How refactor-pipeline Composes With FF
 
-You don't need to adopt this all at once. A staged path:
+`refactor-pipeline` runs in either of two contexts:
 
-### Stage 1: Run orchestrators on one new feature
-Pick F-12 or F-14 (TikTok MCF). Run it through the six buckets. Don't change pr-prep yet. See what the artifacts look like in practice.
+**Inside FF (most common):** invoked by review-orchestrator (or directly by the user during the REVIEW bucket). Appends a `## Refactor Pass — YYYY-MM-DD` section to the active feature's `review.md`. Detailed smell/plan/validation reports go to `.feature-factory/_refactor/<timestamp>/`. `refactor-validator` then cross-checks `review.md`'s `[CRITICAL]`/`[BLOCKER]`/`[ISSUE]` "Fix in this PR" claims against the diff and fails validation if any are unresolved.
 
-### Stage 2: Manually consolidate at PR time
-When that feature's PR is being prepared, copy the six artifacts into `docs/pr-prep/pr{N}/` by hand and write the PR body against them. Don't run pr-prep yet. Note where manual consolidation feels forced vs. natural.
+**Standalone (outside FF):** invoked for ad-hoc cleanup outside an active feature. All outputs go to `.feature-factory/_refactor/<timestamp>/` if `.feature-factory/` exists; otherwise `_refactor-output/<timestamp>/` at project root. No `review.md` cross-check.
 
-### Stage 3: Update pr-prep to detect and consume orchestrator artifacts
-Apply Changes 1–5 above. Run pr-prep on a new PR that has orchestrator artifacts. Iterate.
-
-### Stage 4: Deprecate parallel doc generation
-Once pr-prep reliably consumes artifacts, `_bmad-output/pr-prep/` becomes scratch space that's always deleted at the end of each run. No more "which doc is current?"
+**Active feature detection:** the pipeline walks up to find `.feature-factory/`, then identifies the active feature slug. If exactly one feature folder exists (excluding reserved paths), that's it. If multiple, prefer the slug whose `pr-history.md` shows the most recent row in `in-progress` or `open` state. If still ambiguous, ask the user before writing.
 
 ---
 
-## Open Questions for the Developer
+## Multi-PR Features
 
-Before committing to this integration, some things worth checking:
+A feature may ship across N PRs. Each bucket file (`arch.md`, `func.md`, `errors.md`, `observability.md`, `runbook.md`) accumulates `## PR #N update — YYYY-MM-DD` sections; nothing is overwritten. `review.md` accumulates `## PR #N Review` and `## Refactor Pass — YYYY-MM-DD` sections in chronological order. `pr-history.md` accumulates one row per PR (appended by pr-prep at synthesis time).
 
-1. **Worktree convention**: the orchestrators assume one git worktree per feature. Is that how features are actually developed currently, or does most work happen on a shared branch?
+This makes the feature folder the single source of truth for the feature's history; reviewers can read the chain instead of hunting through merged PRs and historical chat logs.
 
-2. **Artifact location**: `.feature-factory/` is a proposal. If the repo already has a conventional location for per-feature docs (like `docs/features/{feature-id}/`), align with that instead.
+---
 
-3. **Tier handling in pr-prep**: a "quick" tier feature (bug fix) has only `func.md` + `review.md`. pr-prep needs to handle missing artifacts gracefully — not error out when there's no `arch.md`.
+## Multi-Feature PRs
 
-4. **Multi-feature PRs**: if a PR legitimately bundles 2–3 closely-related features (each with their own orchestrator artifacts), pr-prep needs to consume all of them and produce a PR body that covers the bundle coherently. This is a real case that needs design.
+A single PR may touch 2+ features. `manifest.yaml.features` lists them. pr-prep iterates per-feature in Phase 4.5 (one section per slug in `docs-commit-plan.md`) and appends one row to each feature's `pr-history.md`.
 
-5. **Stale artifacts**: if a feature's worktree is abandoned but the artifacts remain, there should be a cleanup rule. Otherwise `.feature-factory/` accumulates garbage.
+---
 
-These don't need answers before Stage 1 — they're questions that'll surface naturally during the staged migration.
+## Where Each Bucket's Output Goes At PR Time
+
+Phase 4.5 (Documentation Commit Plan) is the bridge from working artifacts to committed project docs. Default dispositions per Spec 3:
+
+| FF artifact | Default disposition | Default committed-doc target |
+|-------------|---------------------|-------------------------------|
+| `arch.md` | EDIT existing single section | `docs/architecture/ARCHITECTURE.md` (never auto-create an ADR) |
+| `func.md` | SKIP (working artifact only) | — |
+| `errors.md` | CREATE | `docs/features/<feature>-error-handling.md` (flat naming when `docs/features/` exists; falls back to a section in `CLAUDE.md`) |
+| `observability.md` | CREATE | `docs/features/<feature>-observability.md` |
+| `review.md` | SKIP (working artifact only) | — |
+| `runbook.md` | CREATE | `docs/runbooks/<feature>.md` |
+
+Each row gets per-approval prompting; nothing applies without explicit `y`. CLAUDE.md edits are gated additionally — single-section diffs only; multi-section edits downgrade to `proposed-claude-md-edits.md` for human review.
+
+After Phase 4.5 completes, pr-prep re-renders `pr-description.md`'s "Related Docs" and "Runbook entry" sections so they reference the newly-committed in-repo paths instead of working-artifact paths.
+
+---
+
+## What Changed From the Original Design
+
+The original integration spec (committed before pr-prep was rewritten) proposed promoting FF artifacts into `docs/pr-prep/pr{N}/` at PR time and deleting `_bmad-output/pr-prep/`. That promotion step has been retired:
+
+- `_bmad-output/pr-prep/` is no longer used.
+- `docs/pr-prep/pr{N}/` is no longer used.
+- All pr-prep outputs stay under `.feature-factory/_pr-prep/pr-<N>-<short-slug>/`.
+- Phase 4.5 is the new bridge: it proposes WHICH FF artifacts should be promoted into committed project documentation (`docs/runbooks/`, `docs/features/`, `docs/architecture/`, `CLAUDE.md`) on a per-row, per-approval basis, and stages (but never commits) those changes.
+
+The "single source of truth" property is preserved: the `<slug>/` folder is the working source of truth during development; Phase 4.5 explicitly promotes selected content into committed-doc paths when ready, with hand-edit detection to avoid clobbering manual changes.
+
+---
+
+## Migration Path (for existing projects)
+
+If a project still uses `_bmad-output/pr-prep/` or `docs/pr-prep/pr{N}/` from the legacy design:
+
+1. **First run:** `mkdir -p .feature-factory/_pr-prep/` and let pr-prep populate it on the next run.
+2. **Manual sweep:** copy any still-valuable content from `_bmad-output/pr-prep/` into the new layout under `.feature-factory/_pr-prep/pr-<N>-<short-slug>/`.
+3. **Delete or `.gitignore`** the legacy `_bmad-output/pr-prep/` directory.
+
+For ongoing/active features: when ARCH first runs, it auto-creates `.feature-factory/<feature-slug>/`. Existing `pr-history.md` from any prior tooling can be left in place; pr-prep will append rows to it.
+
+---
+
+## Spec References
+
+The pr-prep skill cites four canonical specs in the consuming project's `docs/specs/`:
+
+- **Spec 1** (`pr-prep-feature-factory-1-ingestion.md`) — Phase 2c FF detection and context digest format
+- **Spec 2** (`pr-prep-feature-factory-2-enrichment.md`) — How Phase 3 agents consume FF context
+- **Spec 3** (`pr-prep-feature-factory-3-commit-plan.md`) — Phase 4.5 disposition rules and CLAUDE.md guardrails
+- **Spec 4** (`pr-prep-feature-factory-4-organization.md`) — Output layout under `.feature-factory/_pr-prep/`
+
+If the consuming project doesn't have these spec files, pr-prep still operates from the defaults documented in its SKILL.md.

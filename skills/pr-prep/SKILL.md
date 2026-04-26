@@ -87,7 +87,9 @@ notes: |
 
 The `notes` field documents any cross-repo asset paths (e.g. Remotion `video-studio/public/pr<N>/` in agency-operations) that aren't co-located inside this PR folder.
 
-### `pr-history.md` append behavior
+### `pr-history.md` ownership and append behavior
+
+`pr-history.md` is **owned by pr-prep**. It is the sole writer of new rows because it is the only skill with the PR number, base branch, and synthesis date. Feature Factory orchestrators (`arch-`, `func-`, `errors-`, `obsv-`, `review-`, `docs-orchestrator`) read this file for multi-PR context and may **update** the `Status` column on existing rows (e.g., `in-progress` → `merged`) when the user moves a PR forward, but they never create the file or insert new rows. This avoids the first-run race that occurs when two writers both initialize the schema header.
 
 Phase 4 (Synthesis) appends one row to `.feature-factory/<feature-slug>/pr-history.md` for **each feature listed in `manifest.yaml.features`**. Schema (matches the orchestrator skills' format):
 
@@ -613,6 +615,13 @@ The "unmapped" items become inputs to Phase 4.5's commit plan.
   _(Videos organized by feature area — see Manual Testing Guide for scenario details)_
   ```
 - Summarize commits into "What's Included" sections
+- **Include a "Success Criteria" section** — required by the Karpathy Skills #4 (Goal-Driven Execution) guideline. State the verifiable outcome(s) this PR is judged against as a checklist; each line must be checkable (a passing test command, a manual flow with expected result, a metric, or a flag flip). Source from the PRD's acceptance criteria when present, otherwise derive from the code/test audit. This section is the explicit answer to "how do we know this PR worked?" and lets reviewers verify rather than guess.
+  ```
+  ## Success Criteria
+  - [ ] `pytest tests/<path>` passes (was failing on main / new test)
+  - [ ] `<endpoint>` returns `<expected shape>` for `<input>`
+  - [ ] Manual: <user flow> produces <observable outcome>
+  ```
 - **Include a "What This PR Does NOT Include" section** — a table clarifying what is explicitly out of scope for this PR and where it's planned. This helps reviewers understand scope boundaries and prevents "why didn't you also do X?" questions. Read the PRD and prior PRs to identify deferred work, then present as:
   ```
   | Area | Status | Planned |

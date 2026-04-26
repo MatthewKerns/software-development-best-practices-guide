@@ -34,7 +34,7 @@ The `<feature-slug>/` folder is the canonical home for this feature's artifacts 
 
 1. **Resolve slug.** If the user hasn't named the feature, propose a kebab-case slug derived from their request. Confirm before proceeding. The `.feature-factory/guide/` and `.feature-factory/_pr-prep/` paths are reserved — never use as feature slugs.
 2. **Auto-create folder.** `mkdir -p .feature-factory/<feature-slug>/` if absent. Prompt once: "Creating `.feature-factory/<feature-slug>/` for this feature — proceed?" Default yes.
-3. **Initialize `pr-history.md`.** If absent, create it with the schema below. pr-prep appends rows; the orchestrator updates statuses.
+3. **Don't create `pr-history.md`.** pr-prep is the sole writer of new rows — it has the PR number, branch, and date that the schema needs. If `pr-history.md` already exists, the orchestrator may **update** the `Status` column for prior rows (e.g., `in-progress` → `merged`) when the user moves a PR forward, but never inserts new rows. The schema below is reference-only so the orchestrator can validate format if asked.
 
 ### Multi-PR features
 
