@@ -1,6 +1,8 @@
 # Feature Factory — Full Skill Package
 
-Six master orchestrator skills for the feature-delivery pipeline, plus integration notes for how they fit with the existing `pr-prep` skill.
+Six master orchestrator skills for the feature-delivery pipeline, plus integration notes for how they fit with the existing `pr-prep` skill and `refactor-pipeline`.
+
+**Visual overview:** see [`diagrams.md`](./diagrams.md) for four mermaid diagrams covering the timeline, artifact ownership, pr-prep handshake, and refactor-pipeline wiring (renders on GitHub). Open [`diagrams.html`](./diagrams.html) in a browser for an offline self-contained view.
 
 ---
 

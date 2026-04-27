@@ -2,6 +2,8 @@
 
 This doc describes how the three skill families compose end-to-end during a feature build. It supersedes any older flow diagrams that referenced `_bmad-output/pr-prep/` or `docs/pr-prep/pr{N}/` — those paths are retired per pr-prep Spec 4 (artifact organization).
 
+> **Visual companion:** [`diagrams.md`](./diagrams.md) renders the same wiring as four mermaid diagrams (timeline, artifact ownership, pr-prep handshake, refactor-pipeline FF-context decision). Open [`diagrams.html`](./diagrams.html) for an offline self-contained view.
+
 ---
 
 ## The Canonical Layout
