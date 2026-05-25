@@ -1,0 +1,80 @@
+# =============================================================================
+# Feature Flag Registry — SOURCE OF TRUTH for every flag in the system.
+# =============================================================================
+#
+# This file owns flag IDENTITY: name, type, owner, intent, default, and expiry.
+# Your flag PLATFORM (PostHog / LaunchDarkly / custom) owns TARGETING:
+# rollout %, cohorts, and per-org/live state. Do NOT record per-cohort
+# rollout moves here — that churn belongs in the platform's audit log.
+#
+# CI RULE (enforced): a `release` flag whose `expires_at` is in the past, and
+# has not been renewed, FAILS THE BUILD. Renew (push the date out, with a
+# reason), delete the flag (it graduated), or reclassify it. See
+# FEATURE_FLAG_REGISTRY.md §5 for the reference check + workflow.
+#
+# CONVENTIONS
+#   - name:        <type>_<feature>, unique, lower_snake_case.
+#   - owner:       a TEAM, never a person (people leave; teams persist).
+#   - description: what it controls, what it REPLACED, and — for kill-switches
+#                  — the fail-safe direction (fail-open vs fail-closed).
+#   - dates:       ISO 8601 (YYYY-MM-DD).
+# =============================================================================
+
+flags:
+
+  # ---------------------------------------------------------------------------
+  # ops — operational toggle / kill-switch. Long-lived. NOT expiry-enforced.
+  # ---------------------------------------------------------------------------
+  - name: ops_maintenance_mode
+    type: ops
+    owner: platform-team                 # TEAM, not an individual
+    description: |
+      Global pre-auth kill-switch. When ON, non-staff see a maintenance
+      page and /api/* returns 503 (except /health). Staff bypass via the
+      is_internal_staff claim.
+      Fail-safe direction: FAIL-CLOSED — if the flag service is unreachable,
+      treat as ON so a half-down system doesn't serve broken traffic.
+      Replaces: the old MAINTENANCE=1 env var (required a redeploy to flip).
+    platform_key: ops_maintenance_mode   # rename to posthog_key / launchdarkly_key / etc.
+    environments: [staging, production]
+    hard_disabled_in: []                  # e.g. [development] to force-OFF somewhere
+    created_at: 2026-01-15
+    related_adr: [ADR-001]
+    # No expires_at — ops flags are part of the permanent operational toolkit.
+
+  # ---------------------------------------------------------------------------
+  # release — temporary rollout gate. MUST have expires_at. EXPIRY-ENFORCED.
+  # ---------------------------------------------------------------------------
+  - name: release_new_checkout_flow
+    type: release
+    owner: checkout-team
+    description: |
+      Gates the redesigned checkout page + its nav entry. Ships DARK
+      (default 0% rollout) so deploy != release; ops ramps cohorts via
+      the platform UI when ready. Retire at GA: delete this row, the
+      platform key, and every `if (flag)` branch in checkout/.
+      Replaces: the FEATURE_NEW_CHECKOUT env-var anti-pattern.
+    platform_key: release_new_checkout_flow
+    environments: [staging, production]
+    default_rollout: 0                    # INTENDED default; live value lives in the platform
+    backend_default: false                # code-level fallback when platform is unreachable
+    created_at: 2026-05-01
+    expires_at: 2026-07-01                # renew-or-remove deadline (rollout window + GA-decision buffer)
+    related_adr: [ADR-014]
+
+  # ---------------------------------------------------------------------------
+  # entitlement — tier/plan-based access. Permanent product matrix.
+  # Often matrix-only (resolved by an in-code table, no platform key).
+  # ---------------------------------------------------------------------------
+  - name: entitlement_advanced_analytics
+    type: entitlement
+    owner: billing-team
+    description: |
+      Tier-gated access to the Advanced Analytics dashboard. Resolved from
+      the in-code TIER_FEATURES table — this is NOT a platform flag, so
+      there is no key to look up in PostHog/LaunchDarkly.
+      Changes only when the plan matrix changes.
+    matrix_only: true                     # resolved in code, not on a flag platform
+    tiers: [Pro, Enterprise]              # plans that unlock the feature
+    created_at: 2026-03-10
+    related_adr: [ADR-009]

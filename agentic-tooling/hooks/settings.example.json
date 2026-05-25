@@ -1,0 +1,38 @@
+{
+  "_description": "EXAMPLE Claude Code settings wiring the agentic-tooling hooks. Copy the hooks/ + statusLine blocks into your project's .claude/settings.json and adjust paths/timeouts. DO NOT CHANGE the security hook wiring without updating the tests.",
+  "_note": "Paths use $CLAUDE_PROJECT_DIR, which Claude Code sets to the project root. Place the .sh scripts at .claude/hooks/ in your project (or update the paths).",
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-profile.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/security-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+
+  "statusLine": {
+    "type": "command",
+    "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/statusline.sh",
+    "padding": 0
+  },
+
+  "env": {}
+}

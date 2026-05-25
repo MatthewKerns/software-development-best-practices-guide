@@ -13,5 +13,12 @@ Thumbs.db
 *.tmp
 *.log
 
+# Node (the package now ships an MCP server + CLI with deps)
+node_modules/
+
+# Python caches (hook test suite)
+__pycache__/
+*.pyc
+
 # Claude Code local settings (user-specific paths)
 .claude/settings.local.json

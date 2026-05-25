@@ -1,8 +1,20 @@
 {
   "name": "@matthewkerns/software-development-best-practices-guide",
-  "version": "1.4.2",
-  "description": "A comprehensive, project-agnostic guide synthesizing principles from Code Complete 2, Clean Code, and Clean Architecture",
+  "version": "1.5.0",
+  "description": "A comprehensive, project-agnostic guide synthesizing principles from Code Complete 2, Clean Code, and Clean Architecture — plus shared agentic-coding tooling (skills, agents, hooks, the mango-tools MCP server, and a sync CLI)",
   "main": "index.js",
+  "bin": {
+    "mango-tools": "mcp/server.mjs",
+    "bpg-sync": "bin/sync-claude-tooling.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8",
+    "js-yaml": "^4.1.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MatthewKerns/software-development-best-practices-guide.git"
@@ -35,15 +47,23 @@
     "07-agentic-coding/**/*.md",
     "08-project-management/**/*.md",
     "09-production-readiness/**/*.md",
+    "09-production-readiness/**/*.yaml",
     "10-geist-gap-analysis-framework/**/*.md",
     "99-reference/**/*.md",
     "skills/**/*.md",
     "skills/**/*.py",
     "skills/**/*.yaml",
     "agents/**/*.md",
+    "agentic-tooling/**/*.md",
+    "agentic-tooling/**/*.sh",
+    "agentic-tooling/**/*.json",
+    "agentic-tooling/**/*.py",
+    "mcp/**/*.mjs",
+    "bin/**/*.mjs",
     "docs/**/*.md",
     "README.md",
     "CLAUDE.md",
+    "INSTALL_AGENTIC_TOOLING.md",
     "LICENSE"
   ]
 }

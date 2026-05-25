@@ -1,0 +1,75 @@
+{
+  "_description": "Base Claude Code project settings — hooks, env, and common permissions shared by all role profiles. Copy to <project>/.claude/settings.json and adapt.",
+  "_note": "Profile-specific permissions live in ./settings/settings.{name}.json. Common allow/deny entries are here so they aren't duplicated across profiles. Hook scripts referenced below ship in this guide's agentic-tooling/hooks/ — install them into <project>/.claude/hooks/ via `bpg-sync --project . --only hooks` (or copy them).",
+
+  "permissions": {
+    "allow": [
+      "Skill",
+      "Bash",
+      "Bash(*)",
+      "Read(*)",
+      "Edit(*)",
+      "Write(*)"
+    ],
+    "deny": [
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(sudo rm -rf *)",
+      "Bash(dd if=/dev/zero of=/dev/*)",
+      "Bash(mkfs *)",
+      "Bash(> /dev/sda*)"
+    ],
+    "_optional_cloud_denies": [
+      "Uncomment and merge into deny[] if this project touches cloud infra:",
+      "Bash(cdk destroy *)",
+      "Bash(terraform destroy *)",
+      "Bash(aws rds delete-*)",
+      "Bash(aws ec2 terminate-*)",
+      "Bash(aws cloudformation delete-*)",
+      "Bash(aws secretsmanager delete-*)",
+      "Bash(aws iam delete-*)"
+    ]
+  },
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-profile.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/security-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+
+  "statusLine": {
+    "type": "command",
+    "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/statusline.sh",
+    "padding": 0
+  },
+
+  "env": {
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
+    "MAX_THINKING_TOKENS": "16000",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "_profile": "REPLACE-role-mode",
+  "_profile_label": "REPLACE — e.g. 'Senior Dev — Permissive' or 'Contractor — Restricted'",
+  "_description": "Role profile. Merged ON TOP of settings.base.json at session start. Use empty arrays for a permissive role (the base deny list + security hook are the safety net); fill deny/ask to restrict.",
+  "_how_to_use": "Claude Code loads .claude/settings.json (base). A profile selector (e.g. a `make settings` target or check-profile.sh) symlinks/copies the chosen settings.<name>.json over settings.local.json. Keep base immutable; vary only the profile.",
+
+  "permissions": {
+    "_permissive_example": "A trusted role can leave all three arrays empty and rely on base deny + security-check.sh hook.",
+    "deny": [],
+    "ask": [],
+    "allow": [],
+
+    "_restricted_example_deny": [
+      "Examples to copy into deny[] for a restricted role:",
+      "Bash(aws *)", "Bash(cdk *)", "Bash(terraform *)", "Bash(kubectl *)",
+      "Bash(sudo *)", "Bash(rm -rf *)", "Bash(chmod *)", "Bash(chown *)",
+      "Bash(git push origin main *)", "Bash(git rebase *)", "Bash(git branch -D *)",
+      "Bash(gh pr merge *)", "Bash(npm publish *)", "Bash(docker push *)",
+      "Edit(infrastructure/**)", "Write(infrastructure/**)",
+      "Edit(.github/workflows/**)", "Write(.github/workflows/**)"
+    ],
+    "_restricted_example_ask": [
+      "Examples to copy into ask[] (prompt before running) for a restricted role:",
+      "Bash(git push *)", "Bash(git merge *)", "Bash(npm install *)", "Bash(pip install *)",
+      "Bash(docker run *)", "Bash(rm *)", "Bash(mv *)",
+      "Edit(package.json)", "Edit(<auth-core-paths>)", "Edit(<migration-paths>)"
+    ],
+    "_restricted_only": "Add \"disableBypassPermissionsMode\": \"disable\" for the most locked-down roles."
+  }
+}
