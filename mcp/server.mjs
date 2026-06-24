@@ -109,7 +109,20 @@ function scoreDoc(relPath, terms) {
   return score;
 }
 
-const server = new McpServer({ name: "mango-tools", version: "1.5.0" });
+const server = new McpServer(
+  { name: "mango-tools", version: "1.5.0" },
+  {
+    // Surfaced to the client on initialize. Despite the "mango" prefix, this is
+    // NOT the Mango freelance-business app connector — disambiguate up front.
+    instructions:
+      "mango-tools — a software-development best-practices guide. Tools here return " +
+      "reference content for writing code: get_best_practice / read_guide / " +
+      "get_checklist / scaffold_agents_md / list_patterns / validate_flag_registry.\n\n" +
+      "This is NOT the Mango business app. If you want to act on the user's Mango " +
+      "workspace (time, income, objectives, proposals, invoices), that is the separate " +
+      "`mango` connector — not this server.",
+  },
+);
 
 /* ----------------------------- Tools ----------------------------- */
 
