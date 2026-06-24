@@ -1,6 +1,6 @@
 {
   "name": "@matthewkerns/software-development-best-practices-guide",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "A comprehensive, project-agnostic guide synthesizing principles from Code Complete 2, Clean Code, and Clean Architecture — plus shared agentic-coding tooling (skills, agents, hooks, the mango-tools MCP server, and a sync CLI)",
   "main": "index.js",
   "bin": {
