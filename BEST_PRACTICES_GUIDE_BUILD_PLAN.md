@@ -118,6 +118,7 @@ best-practices-guide/
 │   ├── README.md
 │   ├── CODE_REVIEWS.md             # Code Complete 2 Ch 21
 │   ├── PAIR_PROGRAMMING.md         # Code Complete 2 Ch 21
+│   ├── STAKEHOLDER_COMMUNICATIONS.md # ROADMAP — client/stakeholder update discipline + verify-before-ask gate
 │   └── INTEGRATION_PLAYBOOK.md     # Current guide - moved here
 │
 ├── 10-geist-gap-analysis-framework/ # Current philosophical framework
@@ -565,3 +566,21 @@ If you have access to the three books, you can:
 ---
 
 **Remember: This guide structure transforms three foundational books into an integrated, actionable system enhanced by the Geist framework's philosophical depth. The result is a comprehensive software development best practices guide that is both principled and pragmatic.**
+
+---
+
+## 🆕 Roadmap Additions (beyond the original three-books scope)
+
+### `stakeholder-communications` skill + `06-collaborative-construction/STAKEHOLDER_COMMUNICATIONS.md`
+
+**Why**: We generate client/stakeholder-facing updates (e.g. Slack notes, briefs, test asks to Trevor on IDEA Brand Coach). There is currently no guide section or skill governing *external* communication discipline — `06-collaborative-construction` only covers internal team practices (reviews, pair programming, working-with-agents).
+
+**Governing rule (the reason this was raised)** — **verify-before-ask gate**: never ask an external stakeholder to test, verify, or re-walk something the agent/author has not first verified end-to-end themselves. No "please try X and confirm" for unexercised behaviour. Verify → report only what's confirmed → if you can't verify, say so plainly rather than outsourcing the first check.
+
+**Scope for the skill/doc**:
+- The verify-before-ask gate (above) as the hard rule.
+- Update anatomy: what was done, what was *verified* (and how), what's genuinely left for the stakeholder, explicit confidence/unknowns.
+- Honesty over reassurance — don't claim a fix works without evidence.
+- Tone/format templates per channel (Slack, email, brief).
+
+**Status**: ROADMAP — captured 2026-07-09. Interim enforcement lives in the IDEA Brand Coach `AGENTS.md` ("Never Do") until the shared skill exists; migrate that rule here when built so it applies across all projects.
