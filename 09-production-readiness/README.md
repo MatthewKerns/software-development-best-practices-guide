@@ -89,7 +89,7 @@ Meets regulatory requirements and industry standards.
 - **[PRODUCTION_READINESS_FRAMEWORK.md](PRODUCTION_READINESS_FRAMEWORK.md)** - Complete 8-area assessment framework with detailed checklists for each domain
 
 ### Operational Guides
-- **[PRODUCTION_DEPLOYMENT_CHECKLIST.md](PRODUCTION_DEPLOYMENT_CHECKLIST.md)** - Step-by-step deployment validation checklist
+- **`prod-deploy-review` skill** (`skills/prod-deploy-review/`) - the executable pre-deployment gate. Classifies a change by blast radius, spawns only the reviewer lenses that radius warrants, runs the deterministic checks (staging parity, rollback, served-artefact verification) and emits GO / NO-GO / GO WITH CONDITIONS. Replaces the never-written `PRODUCTION_DEPLOYMENT_CHECKLIST.md` this line used to point at.
 - **[ROLLBACK_AND_RECOVERY.md](ROLLBACK_AND_RECOVERY.md)** - Disaster recovery and rollback procedures
 - **[MONITORING_AND_OBSERVABILITY.md](MONITORING_AND_OBSERVABILITY.md)** - Monitoring setup and alerting configuration
 - **[RAILWAY_DEPLOYMENT_BEST_PRACTICES.md](RAILWAY_DEPLOYMENT_BEST_PRACTICES.md)** - Comprehensive Railway deployment guide (distilled from 159 commits)
@@ -142,7 +142,7 @@ coordination-meta-agent
 Parallel Verification Phase:
 • security-validator → SECURITY_HARDENING.md checks
 • performance-validator → PERFORMANCE_BENCHMARKS.md validation
-• integration-tester → PRODUCTION_DEPLOYMENT_CHECKLIST.md execution
+• integration-tester → `prod-deploy-review` skill execution
 • gap-analyzer → Identify missing production requirements
 ↓
 Sequential Release Phase:
@@ -199,7 +199,7 @@ Apply DRY principles to production infrastructure:
 ### Phase 2: Pre-Deployment Validation (1-3 days before deployment)
 
 1. **Checklist Execution**
-   - Complete [PRODUCTION_DEPLOYMENT_CHECKLIST.md](PRODUCTION_DEPLOYMENT_CHECKLIST.md)
+   - Run the `prod-deploy-review` skill and resolve its verdict (a GO WITH CONDITIONS names its own blockers)
    - Verify all 8 areas pass validation
    - Document evidence of readiness
 
@@ -282,7 +282,7 @@ Apply DRY principles to production infrastructure:
 4. Execute in priority order before next deployment
 
 ### For Pre-Launch Teams
-1. Start with [PRODUCTION_DEPLOYMENT_CHECKLIST.md](PRODUCTION_DEPLOYMENT_CHECKLIST.md)
+1. Start with the `prod-deploy-review` skill
 2. Identify gaps and create task list
 3. Allocate 1-2 weeks for production readiness work
 4. Don't compromise on critical items (better to delay than launch broken)
